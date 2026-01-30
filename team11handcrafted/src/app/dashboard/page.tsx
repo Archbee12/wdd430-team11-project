@@ -1,4 +1,5 @@
 import { inter } from '@/app/ui/fonts';   
+import '@/app/globals.css'
 
 export default async function Page() {
   return (

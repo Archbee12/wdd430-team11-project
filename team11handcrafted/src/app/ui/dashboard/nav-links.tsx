@@ -1,41 +1,48 @@
 'use client';
 
 import Link from 'next/link';
-import clsx from 'clsx';
-import { usePathname } from 'next/dist/client/components/navigation';
+import { usePathname } from 'next/navigation';
 
-// Map of links to display in the side navigation.
-// Depending on the size of the application, this would be stored in a database.
 const links = [
-  { name: 'Home', href: '/dashboard' },
-  {
-    name: 'Invoices',
-    href: '/dashboard/artisans'
-  },
-  { name: 'Customers', href: '/dashboard/products'},
+  { name: 'Dashboard', href: '/dashboard' },
+  { name: 'Artisans', href: '/dashboard/artisans' },
+  { name: 'Products', href: '/dashboard/products' },
+  { name: 'Reviews', href: '/dashboard/reviews' },
 ];
 
 export default function NavLinks() {
   const pathname = usePathname();
+
   return (
-    <>
-      {links.map((link) => {
-        
-        return (
-          <Link
-            key={link.name}
-            href={link.href}
-            className={clsx(
-              "flex h-[48px] grow items-center justify-center gap-2 rounded-md bg-gray-50 p-3 text-sm font-medium hover:bg-sky-100 hover:text-blue-600 md:flex-none md:justify-start md:p-2 md:px-3",
-              {
-                "bg-sky-100 text-blue-600": pathname === link.href,
-              }
-            )}
-          >
-            <p className="hidden md:block">{link.name}</p>
-          </Link>
-        );
-      })}
-    </>
+    <nav className="nav-container">
+      {/* Top links */}
+      <ul className="nav-links">
+        {links.map((link) => {
+          const isActive = pathname === link.href;
+
+          return (
+            <li key={link.name}>
+              <Link
+                href={link.href}
+                className={`nav-link ${isActive ? 'active' : ''}`}
+              >
+                {link.name}
+              </Link>
+            </li>
+          );
+        })}
+      </ul>
+      
+      {/* Sidenav divider */}
+      <div className="nav-divider" />
+
+      {/* Bottom section */}
+      <div className="nav-bottom">
+
+        <button className="nav-link signout">
+          Sign Out
+        </button>
+      </div>
+    </nav>
   );
 }
