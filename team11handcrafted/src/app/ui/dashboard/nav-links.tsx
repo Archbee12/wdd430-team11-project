@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
 const links = [
-  { name: 'Dashboard', href: '/dashboard' },
+  { name: 'Home', href: '/dashboard' },
   { name: 'Artisans', href: '/dashboard/artisans' },
   { name: 'Products', href: '/dashboard/products' },
   { name: 'Reviews', href: '/dashboard/reviews' },
@@ -32,17 +32,10 @@ export default function NavLinks() {
           );
         })}
       </ul>
-      
+
       {/* Sidenav divider */}
       <div className="nav-divider" />
-
-      {/* Bottom section */}
-      <div className="nav-bottom">
-
-        <button className="nav-link signout">
-          Sign Out
-        </button>
-      </div>
+      
     </nav>
   );
 }
