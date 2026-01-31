@@ -4,7 +4,7 @@ import { poppins } from '@/app/ui/fonts';
 export default function Header() {
   return (
     <header>
-      <Link href="/" className="sidenav-logo">
+      <Link href="/dashboard" className="sidenav-logo">
         <h1 className={poppins.className}>Handcrafted Haven</h1>
       </Link>
       <nav>

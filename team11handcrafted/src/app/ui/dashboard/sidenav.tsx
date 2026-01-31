@@ -11,7 +11,7 @@ export default function SideNav() {
       <NavLinks />
 
       <div className="nav-bottom">
-
+        
         <button className="nav-link signout">
           Sign Out
         </button>
