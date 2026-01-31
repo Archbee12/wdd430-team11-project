@@ -12,12 +12,12 @@ export function ProductCard({
   amount,
 }: ImageCardProps) {
   return (
-    <div className="card">
-      <div className={`image-card__image ${imageSrc}`}>
-        <img src="/images/harvest-chest.webp" alt={title} />
+    <div className="product-card">
+      <div className={`product-card__image ${imageSrc}`}>
+        <img src={imageSrc} alt={title} />
       </div>
 
-      <div className="image-card__content">
+      <div className="product-card__content">
         <h3>{title}</h3>
         {subtitle && <p className="subtitle">{subtitle}</p>}
         {amount && <p className="amount">${amount}</p>}
@@ -28,12 +28,13 @@ export function ProductCard({
 
 export default function ProductCardWrapper() {
   return (
-    <>
-      <ProductCard title="Harvest Chest Handcrafted Wooden Storage Box" subtitle="Handcrafted with care" amount={12}/>
+    <div className="products">
+      <ProductCard imageSrc="/images/harvest-chest.png" title="Harvest Chest Handcrafted Wooden Storage Box" subtitle="Handcrafted with care" amount={12}/>
+      <ProductCard imageSrc="/images/shopping.png" title="Handcrafted Italian Full Grain Leather Woven Handbag" subtitle="Premium quality" amount={15.99}/>
       {/* <ProductCard title="Products" subtitle={48} />
       <ProductCard title="Orders" subtitle={7} />
       <ProductCard title="Revenue" subtitle="$1,200" /> */}
-    </>
+    </div>
   );
 }
 // export function Card({
