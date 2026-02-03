@@ -16,10 +16,10 @@ export default function DashboardLayout({
 
         <main className="dashboard-content">
           {children}
+          <Footer />
         </main>
       </div>
 
-      <Footer />
     </div>
   );
 }
