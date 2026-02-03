@@ -15,10 +15,11 @@ export default function DashboardLayout({
         <SideNav />
 
         <main className="dashboard-content">
-          {children}
-          <Footer />
+          {children}          
         </main>
+
       </div>
+      <Footer />
 
     </div>
   );

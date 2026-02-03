@@ -19,8 +19,8 @@ body {
   font-family: 'Inter', sans-serif;
   background-color: var(--accent1);
   color: var(--accent2);
-  height: 100%;
-  overflow: hidden; /* desktop controlled scrolling */
+  height: 100vh;
+  /* overflow: hidden; */
 }
 
 a {
@@ -59,12 +59,13 @@ footer {
   padding: 2rem 1rem;
   background-color: var(--primary);
   color: white;
+  margin-top: auto;
 }
 
 /* ======= DASHBOARD LAYOUT ======== */
 
 .dashboard-layout {
-  height: 100vh;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
 }
