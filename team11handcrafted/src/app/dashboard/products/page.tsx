@@ -1,4 +1,4 @@
-import { inter } from '@/app/ui/fonts';   
+import { inter } from '@/app/ui/fonts'; 
 
 export default async function Page() {
   return (
@@ -10,5 +10,6 @@ export default async function Page() {
     </main>
   );
 }
+
 
 

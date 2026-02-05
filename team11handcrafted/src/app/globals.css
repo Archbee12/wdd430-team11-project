@@ -20,7 +20,7 @@ body {
   background-color: var(--accent1);
   color: var(--accent2);
   height: 100vh;
-  overflow: hidden;
+  /* overflow: hidden; */
 }
 
 a {
@@ -279,9 +279,9 @@ header nav a:hover {
     overflow: auto;
   }
 
-  .dashboard-layout {
+  /* .dashboard-layout {
     height: auto;
-  }
+  } */
 
   .dashboard-main {
     flex-direction: column;
