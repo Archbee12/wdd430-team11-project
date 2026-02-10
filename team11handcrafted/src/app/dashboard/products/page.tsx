@@ -1,52 +1,29 @@
-import Image from "next/image";
-import { products } from "@/app/lib/mockData";
+import { getAllProducts } from '@/app/lib/actions';
+import ProductCardWrapper from '@/app/ui/dashboard/product-cards';
+import { inter } from '@/app/ui/fonts';
 
-export default function ProductsPage() {
+export default async function ProductsPage() {
+  // Fetch products data first
+  const products = await getAllProducts();
+
   return (
-    <main style={{ padding: 24 }}>
-      <h1>Our Products</h1>
-      <p>Handcrafted items made with care.</p>
+    <main>
+      <div className={`${inter.className} p-4 dashboard-header`}>
+        <h1 className="text-2xl font-bold mb-4">Products</h1>
+      </div>
 
-      <section
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fill, minmax(240px, 1fr))",
-          gap: 24,
-          marginTop: 24,
-        }}
-      >
-        {products.map((product) => (
-          <div
-            key={product.id}
-            style={{
-              border: "1px solid #ddd",
-              borderRadius: 12,
-              padding: 16,
-            }}
-          >
-            <Image
-              src={product.image}
-              alt={product.name}
-              width={240}
-              height={240}
-              style={{ borderRadius: 8 }}
-            />
-
-            <h3>{product.name}</h3>
-            <p>{product.craft}</p>
-            <p>${product.price}</p>
-
-            <section>
-              <strong>Reviews</strong>
-              {product.reviews.map((review, index) => (
-                <p key={index}>
-                  ⭐ {review.rating}/5 — {review.comment}
-                </p>
-              ))}
-            </section>
-          </div>
+      {/* Products Grid */}
+      <div className="products">
+        {products.map((p) => (
+          <ProductCardWrapper
+            key={p.id}
+            imageSrc={p.image_url}
+            title={p.name}
+            subtitle={p.description}
+            amount={p.price}
+          />
         ))}
-      </section>
+      </div>
     </main>
   );
 }
