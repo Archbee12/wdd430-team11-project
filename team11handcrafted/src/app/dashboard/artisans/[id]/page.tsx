@@ -1,6 +1,7 @@
 import { getArtisanById } from '@/app/lib/actions';
 import { inter } from '@/app/ui/fonts';
 import { notFound } from 'next/navigation';
+import Image from 'next/image';
 
 type Props = { params: { id: string } };
 
@@ -15,7 +16,12 @@ export default async function ArtisanDetailPage({ params }: Props) {
       <div className="artisan-card-detail">
         {/* Left Side - Image */}
         <div className="artisan-image">
-          <img src={artisan.image_url} alt={artisan.name} />
+          <Image
+            src={artisan.image_url ?? '/images/artisans/default-artisan.png'}
+            alt={artisan.name ?? 'Artisan'}
+            width={400}
+            height={300}
+          />
         </div>
 
         {/* Right Side - Details */}

@@ -1,4 +1,4 @@
-// ui/dashboard/product-card.tsx
+import Image from 'next/image';
 
 type ProductCardProps = {
   imageSrc: string;
@@ -11,7 +11,7 @@ export function ProductCard({ imageSrc, title, subtitle, amount }: ProductCardPr
   return (
     <div className="product-card">
       <div className="product-card__image">
-        <img src={imageSrc} alt={title} />
+        <Image src={imageSrc} alt={title} width={300} height={200} />
       </div>
 
       <div className="product-card__content">
