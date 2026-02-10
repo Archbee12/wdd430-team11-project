@@ -1,5 +1,6 @@
 import { getAllArtisans } from '@/app/lib/actions';
 import { inter } from '@/app/ui/fonts';
+import Link from 'next/link';
 
 export default async function ArtisansPage() {
   // Fetch artisans data first
@@ -17,6 +18,7 @@ export default async function ArtisansPage() {
             <th>Name</th>
             <th>Location</th>
             <th>Bio</th>
+            <th>View Profile</th>
           </tr>
         </thead>
         <tbody>
@@ -25,6 +27,11 @@ export default async function ArtisansPage() {
               <td>{a.name}</td>
               <td>{a.location}</td>
               <td>{a.bio}</td>
+              <td>
+                <Link href={`/dashboard/artisans/${a.id}`} className="text-blue-500 hover:underline">
+                  View Profile
+                </Link>
+              </td>
             </tr>
           ))}
         </tbody>

@@ -1,38 +1,51 @@
+// ui/dashboard/artisan-card.tsx
+import Link from 'next/link';
+import Image from 'next/image';
 
-type ImageCardProps = {
+type ArtisanCardProps = {
+  id: string;
   imageSrc: string;
   title: string;
-  subtitle?: string;
-  amount?: number;
+  bio?: string | null;
 };
 
-export function ArtisanCard({
-  imageSrc,
-  title,
-  subtitle,
-}: ImageCardProps) {
+export function ArtisanCard({ id, imageSrc, title, bio }: ArtisanCardProps) {
   return (
-    <div className="artisan-card">
-      <div className={`artisan-card__image ${imageSrc}`}>
-        <img src={imageSrc} alt={title} />
+    <Link href={`/dashboard/artisans/${id}`}>
+      <div className="artisan-card cursor-pointer hover:shadow-lg transition">
+        <div className="artisan-card__image">
+          <Image src={imageSrc} alt={title} width={300} height={200} />
+        </div>
+        <div className="artisan-card__content">
+          <h3>{title}</h3>
+          {bio && <p className="subtitle">{bio.slice(0, 50)}...</p>} {/* snippet */}
+        </div>
       </div>
-
-      <div className="artisan-card__content">
-        <h3>{title}</h3>
-        {subtitle && <p className="subtitle">{subtitle}</p>}
-      </div>
-    </div>
+    </Link>
   );
 }
 
-export default function ArtisanCardWrapper() {
+type ArtisanCardWrapperProps = {
+  artisans: {
+    id: string;
+    name: string;
+    bio?: string | null;
+    image_url: string;
+  }[];
+};
+
+export default function ArtisanCardWrapper({ artisans }: ArtisanCardWrapperProps) {
   return (
     <div className="artisans">
-      <ArtisanCard imageSrc="/images/artisans/artisan1.jpeg" title="Gibber Louiz" subtitle="Handcrafted with care"/>
-      <ArtisanCard imageSrc="/images/artisans/artisan2.jpeg" title="Karmene Alliah" subtitle="Premium quality"/>
+      {artisans.map((a) => (
+        <ArtisanCard
+          key={a.id}
+          id={a.id}
+          imageSrc={a.image_url}
+          title={a.name}
+          bio={a.bio}
+        />
+      ))}
     </div>
   );
 }
-
-
-
