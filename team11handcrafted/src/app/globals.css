@@ -209,7 +209,7 @@ header nav a:hover {
 .products,
 .artisans {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   gap: 1rem;
 }
 
@@ -270,6 +270,69 @@ header nav a:hover {
 .amount {
   font-weight: 700;
 }
+
+/* ====== HANDCRAFTED HAVEN ARTISANS TABLE ====== */
+.artisan-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  border-radius: 0.75rem;
+  overflow: hidden;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
+  background-color: var(--accent1);
+  font-family: 'Inter', sans-serif;
+  font-size: 0.95rem;
+  margin-bottom: 2rem;
+}
+
+/* Header Styling */
+.artisan-table thead {
+  background-color: var(--secondary);
+  color: white;
+}
+
+.artisan-table thead th {
+  font-weight: 600;
+  padding: 0.75rem 1.25rem;
+  text-align: center;
+  border-bottom: 2px solid var(--accent1);
+  border-radius: 0; /* We'll round only the outer corners */
+}
+
+/* Round the top corners of the table */
+.artisan-table thead th:first-child {
+  border-top-left-radius: 0.75rem;
+}
+.artisan-table thead th:last-child {
+  border-top-right-radius: 0.75rem;
+}
+
+/* Body Rows */
+.artisan-table tbody tr {
+  background-color: rgb(205, 213, 215);
+  transition: all 0.25s ease;
+}
+
+/* Soft alternating row colors for “handcrafted” feel */
+.artisan-table tbody tr:nth-child(even) {
+  background-color: var(--accent1);
+}
+
+/* Row hover effect */
+.artisan-table tbody tr:hover {
+  background-color: var(--nav-color);
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+/* Table Cells */
+.artisan-table td {
+  padding: 0.75rem 1.25rem;
+  color: var(--accent2);
+  vertical-align: top;
+}
+
 
 /* ======= RESPONSIVE (MOBILE) ======= */
 

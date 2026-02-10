@@ -1,19 +1,19 @@
-
-create table artisans (
-  id uuid primary key default gen_random_uuid(),
-  name text not null,
-  bio text,
-  location text,
-  created_at timestamp with time zone default now()
+CREATE TABLE artisans (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  name TEXT NOT NULL,
+  bio TEXT,
+  location TEXT,
+  image_url TEXT,
+  created_at TIMESTAMP DEFAULT now()
 );
 
-create table products (
-  id uuid primary key default gen_random_uuid(),
-  artisan_id uuid references artisans(id) on delete cascade,
-  name text not null,
-  description text,
-  price numeric not null,
-  image_url text,
-  created_at timestamp with time zone default now()
+CREATE TABLE products (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  artisan_id UUID REFERENCES artisans(id) ON DELETE CASCADE,
+  name TEXT NOT NULL,
+  description TEXT,
+  price NUMERIC(10,2),
+  rating NUMERIC(2,1),
+  image_url TEXT,
+  created_at TIMESTAMP DEFAULT now()
 );
-

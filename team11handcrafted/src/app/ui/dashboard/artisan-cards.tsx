@@ -49,8 +49,8 @@ export function ArtisanCard({
 export default function ArtisanCardWrapper() {
   return (
     <div className="artisans">
-      <ArtisanCard imageSrc="/images/artisan1.jpeg" title="Gibber Louiz" subtitle="Handcrafted with care"/>
-      <ArtisanCard imageSrc="/images/artisan2.jpeg" title="Karmene Alliah" subtitle="Premium quality"/>
+      <ArtisanCard imageSrc="/images/artisans/artisan1.jpeg" title="Gibber Louiz" subtitle="Handcrafted with care"/>
+      <ArtisanCard imageSrc="/images/artisans/artisan2.jpeg" title="Karmene Alliah" subtitle="Premium quality"/>
     </div>
   );
 }

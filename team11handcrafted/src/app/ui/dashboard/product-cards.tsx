@@ -29,11 +29,8 @@ export function ProductCard({
 export default function ProductCardWrapper() {
   return (
     <div className="products">
-      <ProductCard imageSrc="/images/harvest-chest.png" title="Harvest Chest Handcrafted Wooden Storage Box" subtitle="Handcrafted with care" amount={12}/>
-      <ProductCard imageSrc="/images/shopping.png" title="Handcrafted Italian Full Grain Leather Woven Handbag" subtitle="Premium quality" amount={15.99}/>
-      {/* <ProductCard title="Products" subtitle={48} />
-      <ProductCard title="Orders" subtitle={7} />
-      <ProductCard title="Revenue" subtitle="$1,200" /> */}
+      <ProductCard imageSrc="/images/products/harvest-chest.png" title="Harvest Chest Handcrafted Wooden Storage Box" subtitle="Handcrafted with care" amount={12}/>
+      <ProductCard imageSrc="/images/products/shopping.png" title="Handcrafted Italian Full Grain Leather Woven Handbag" subtitle="Premium quality" amount={15.99}/>
     </div>
   );
 }
