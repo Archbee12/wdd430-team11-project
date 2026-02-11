@@ -1,9 +1,9 @@
-import { getArtisanById } from '@/app/lib/actions';
-import { inter } from '@/app/ui/fonts';
-import { notFound } from 'next/navigation';
-import Image from 'next/image';
+import { getArtisanById } from "@/app/lib/actions";
+import { inter } from "@/app/ui/fonts";
+import { notFound } from "next/navigation";
+import Image from "next/image";
 
-type Props = { params: { id: string } };
+type Props = { params: Promise<{ id: string }> };
 
 export default async function ArtisanDetailPage({ params }: Props) {
   const { id } = await params;
@@ -13,33 +13,30 @@ export default async function ArtisanDetailPage({ params }: Props) {
 
   return (
     <main className={`${inter.className} artisan-detail-page`}>
-      <div className="artisan-card-detail">
-        {/* Left Side - Image */}
-        <div className="artisan-image">
+      <section className="hero-detail">
+        {/* Image */}
+        <div className="hero-image">
           <Image
-            src={artisan.image_url ?? '/images/artisans/default-artisan.png'}
-            alt={artisan.name ?? 'Artisan'}
+            src={artisan.image_url ?? "/images/artisans/default-artisan.png"}
+            alt={artisan.name ?? "Artisan"}
             width={400}
-            height={300}
+            height={400}
+            className="image-rounded"
           />
         </div>
 
-        {/* Right Side - Details */}
-        <div className="artisan-info">
-          <h1 className="artisan-name">{artisan.name}</h1>
-          {artisan.bio && (
-            <p className="artisan-bio">
-              <strong>Bio:</strong> {artisan.bio}
-            </p>
-          )}
-          {artisan.location && (
-            <p className="artisan-location">
-              <strong>Location:</strong> {artisan.location}
-            </p>
-          )}
-          <button className="artisan-contact-btn">Contact Artisan</button>
+        {/* Info */}
+        <div className="hero-info">
+          <h1 className="hero-name">{artisan.name}</h1>
+          {artisan.bio && <p className="hero-bio">{artisan.bio}</p>}
+          {artisan.location && <p className="hero-location">{artisan.location}</p>}
+
+          <div className="hero-actions">
+            <button className="contact-btn">Contact Artisan</button>
+            <button className="view-products-btn">View Products</button>
+          </div>
         </div>
-      </div>
+      </section>
     </main>
   );
 }

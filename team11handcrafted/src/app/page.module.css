@@ -140,7 +140,11 @@
 /* ================= CTA ================= */
 .cta {
   text-align: center;
-  padding: 6rem 1rem;
+  padding: 3rem 1rem;
+}
+
+.featuresTitle {
+  margin-bottom: 0.5rem;
 }
 
 /* ================= FOOTER ================= */

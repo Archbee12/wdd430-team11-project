@@ -3,6 +3,7 @@ import "@/app/globals.css";
 import CardWrapper from "@/app/ui/dashboard/cards";
 import ProductCardWrapper from "@/app/ui/products/product-cards";
 import ArtisanCardWrapper from "@/app/ui/artisans/artisan-cards";
+
 import {
   getAllProducts,
   getAllArtisans,
@@ -11,36 +12,33 @@ import {
 } from "@/app/lib/actions";
 
 export default async function Page() {
-  // Fetch data from DB
   const [products, artisans] = await Promise.all([
     normalizeProducts(await getAllProducts()),
     normalizeArtisans(await getAllArtisans()),
   ]);
-  
+
   const artisanCount = artisans.length;
   const productCount = products.length;
 
   return (
-    <main>
-      <div className={`${inter.className} p-4 dashboard-header`}>
-        <h1 className="text-2xl font-bold mb-4">Dashboard</h1>
+    <div className={`${inter.className} dashboard-page p-6`}>
+      {/* Dashboard Title */}
+      <h1 className="dashboard-title">Dashboard</h1>
 
-        <CardWrapper artisanCount={artisanCount} productCount={productCount} />
+      {/* Cards */}
+      <CardWrapper artisanCount={artisanCount} productCount={productCount} />
 
-        <div className="product-dashboard">
-          <h2 className="text-xl font-semibold mb-4 mt-8">
-            Handcrafted Products
-          </h2>
-          {/* Pass products as prop */}
-          <ProductCardWrapper products={products} />
-        </div>
+      {/* Products Section */}
+      <section className="dashboard-section mt-10">
+        <h2 className="section-title">Handcrafted Products</h2>
+        <ProductCardWrapper products={products} />
+      </section>
 
-        <div className="artisan-dashboard">
-          <h2 className="text-xl font-semibold mb-4 mt-8">Artisans</h2>
-          {/* Pass artisans as prop */}
-          <ArtisanCardWrapper artisans={artisans} />
-        </div>
-      </div>
-    </main>
+      {/* Artisans Section */}
+      <section className="dashboard-section mt-10">
+        <h2 className="section-title">Artisans</h2>
+        <ArtisanCardWrapper artisans={artisans} />
+      </section>
+    </div>
   );
 }

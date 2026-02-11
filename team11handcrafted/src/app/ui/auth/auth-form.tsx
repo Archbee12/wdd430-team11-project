@@ -3,8 +3,14 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { z } from "zod";
+import styles from "./auth-form.module.css";
+import "@/app/globals.css";
+import { poppins } from "@/app/ui/fonts";
 
-// Signup validation
+/* ===============================
+   ZOD SCHEMAS
+================================ */
+
 export const signupSchema = z.object({
   name: z.string().min(1, "Name is required"),
   email: z.string().email("Invalid email"),
@@ -12,83 +18,144 @@ export const signupSchema = z.object({
   role: z.enum(["buyer", "seller", "artisan"]),
 });
 
-// Login validation
 export const loginSchema = z.object({
   email: z.string().email("Invalid email"),
   password: z.string().min(1, "Password is required"),
 });
 
-type AuthFormProps<T> = {
-  type: "signup" | "signin";
-  schema: z.ZodType<T>;
-  action: (data: T) => Promise<void>;
-};
+/* ===============================
+   TYPES
+================================ */
 
-export default function AuthForm<T>({ type, schema, action }: AuthFormProps<T>) {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [role, setRole] = useState<"buyer" | "seller" | "artisan">("buyer");
-  const [error, setError] = useState("");
+type AuthFormProps =
+  | {
+      type: "signup";
+      action: (data: z.infer<typeof signupSchema>) => Promise<void>;
+    }
+  | {
+      type: "signin";
+      action: (data: z.infer<typeof loginSchema>) => Promise<void>;
+    };
+
+/* ===============================
+   COMPONENT
+================================ */
+
+export default function AuthForm({ type, action }: AuthFormProps) {
+  const [error, setError] = useState<string | null>(null);
   const router = useRouter();
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    setError("");
+    setError(null);
+
+    const formData = new FormData(e.currentTarget);
 
     try {
-      const rawData = type === "signup"
-        ? { name, email, password, role }
-        : { email, password };
+      if (type === "signup") {
+        const parsed = signupSchema.parse({
+          name: formData.get("name"),
+          email: formData.get("email"),
+          password: formData.get("password"),
+          role: formData.get("role"),
+        });
 
-      const data = schema.parse(rawData); // Validate input
-      await action(data);
+        await action(parsed);
+      } else {
+        const parsed = loginSchema.parse({
+          email: formData.get("email"),
+          password: formData.get("password"),
+        });
+
+        await action(parsed);
+      }
+
       router.push("/dashboard");
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : "Invalid input";
-      setError(errorMessage);
+      if (err instanceof z.ZodError) {
+        setError(err.issues[0].message);
+      } else if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError("Something went wrong");
+      }
     }
-  };
+  }
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-4 p-6 max-w-md mx-auto mt-10 border rounded shadow">
-      <h1 className="text-xl font-bold">{type === "signup" ? "Sign Up" : "Sign In"}</h1>
-      {error && <p className="text-red-500">{error}</p>}
+    <div className={styles.wrapper}>
+      <form onSubmit={handleSubmit} className={styles.card}>
+        <div className={styles.header}>
+          <h1 className={`${styles.title} ${poppins.className}`}>
+            {type === "signup" ? "Create Account" : "Welcome Back"}
+          </h1>
+          <p className={styles.subtitle}>
+            {type === "signup"
+              ? "Join Handcrafted Haven today"
+              : "Sign in to your account"}
+          </p>
+        </div>
 
-      {type === "signup" && (
-        <>
+        {error && <div className={styles.error}>{error}</div>}
+
+        {type === "signup" && (
+          <>
+            <div className={styles.field}>
+              <label className={styles.label}>Full Name</label>
+              <input
+                name="name"
+                placeholder="Enter your name"
+                className={styles.input}
+              />
+            </div>
+
+            <div className={styles.field}>
+              <label className={styles.label}>Role</label>
+              <select name="role" className={styles.select}>
+                <option value="buyer">Buyer</option>
+                <option value="seller">Seller</option>
+                <option value="artisan">Artisan</option>
+              </select>
+            </div>
+          </>
+        )}
+
+        <div className={styles.field}>
+          <label className={styles.label}>Email</label>
           <input
-            placeholder="Name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            className="border p-2 rounded"
+            name="email"
+            type="email"
+            placeholder="Enter your email"
+            className={styles.input}
           />
-          <select value={role} onChange={(e) => setRole(e.target.value as "buyer" | "seller" | "artisan")} className="border p-2 rounded">
-            <option value="buyer">Buyer</option>
-            <option value="seller">Seller</option>
-            <option value="artisan">Artisan</option>
-          </select>
-        </>
-      )}
+        </div>
 
-      <input
-        placeholder="Email"
-        type="email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        className="border p-2 rounded"
-      />
-      <input
-        placeholder="Password"
-        type="password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        className="border p-2 rounded"
-      />
+        <div className={styles.field}>
+          <label className={styles.label}>Password</label>
+          <input
+            name="password"
+            type="password"
+            placeholder="Enter your password"
+            className={styles.input}
+          />
+        </div>
 
-      <button type="submit" className="bg-blue-500 text-white p-2 rounded hover:bg-blue-600">
-        {type === "signup" ? "Sign Up" : "Sign In"}
-      </button>
-    </form>
+        <button type="submit" className={styles.button}>
+          {type === "signup" ? "Create Account" : "Sign In"}
+        </button>
+
+        <div className={styles.switch}>
+          {type === "signup" ? (
+            <>
+              Already have an account? <a href="/auth/login">Sign In</a>
+            </>
+          ) : (
+            <>
+              Don’t have an account? <a href="/auth/signup">Sign Up</a>
+            </>
+          )}
+        </div>
+      </form>
+    </div>
   );
 }

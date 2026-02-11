@@ -24,7 +24,7 @@ export default function Page() {
           Explore our curated collection of handmade items from talented artisans
           around the world.
         </p>
-        <Link href="/auth/signup" className={styles.ctaButton}>
+        <Link href="#signup" className={styles.ctaButton}>
           Get Started
         </Link>
       </section>
@@ -65,7 +65,7 @@ export default function Page() {
       {/* CTA */}
       <section className={styles.cta} id="signup">
         <h3 className={`${styles.featuresTitle} ${poppins.className}`}>Ready to Explore?</h3>
-        <a href="/signup" className={styles.ctaButton}>
+        <a href="/auth/signup" className={styles.ctaButton}>
           Sign Up Now
         </a>
       </section>
