@@ -13,11 +13,18 @@ const iconMap = {
   orders: ClipboardDocumentListIcon,
 };
 
-export default function CardWrapper() {
+export default function CardWrapper({
+  artisanCount,
+  productCount,
+}: {
+  artisanCount: number;
+  productCount: number;
+}) {
+  
   return (
     <div className="card-wrapper">
-      <Card title="Artisans" value={12} type="artisans" />
-      <Card title="Products" value={48} type="products" />
+      <Card title="Artisans" value={artisanCount} type="artisans" />
+      <Card title="Products" value={productCount} type="products" />
       <Card title="Orders" value={7} type="orders" />
       <Card title="Revenue" value="$1,200" type="revenue" />
     </div>

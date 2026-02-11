@@ -4,7 +4,7 @@ import Image from 'next/image';
 
 type ArtisanCardProps = {
   id: string;
-  imageSrc: string;
+  imageSrc: string | null;
   title: string;
   bio?: string | null;
 };
@@ -14,7 +14,7 @@ export function ArtisanCard({ id, imageSrc, title, bio }: ArtisanCardProps) {
     <Link href={`/dashboard/artisans/${id}`}>
       <div className="artisan-card cursor-pointer hover:shadow-lg transition">
         <div className="artisan-card__image">
-          <Image src={imageSrc} alt={title} width={300} height={200} />
+          <Image src={imageSrc || '/placeholder.jpg'} alt={title} width={300} height={200} />
         </div>
         <div className="artisan-card__content">
           <h3>{title}</h3>

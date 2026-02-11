@@ -10,13 +10,15 @@ export default async function Page() {
   // Fetch data from DB
   const products = await getAllProducts();
   const artisans = await getAllArtisans();
+  const artisanCount = artisans.length;
+  const productCount = products.length;
 
   return (
     <main>
       <div className={`${inter.className} p-4 dashboard-header`}>
         <h1 className="text-2xl font-bold mb-4">Dashboard</h1>
 
-        <CardWrapper />
+        <CardWrapper artisanCount={artisanCount} productCount={productCount} />
 
         <div className="product-dashboard">
           <h2 className="text-xl font-semibold mb-4 mt-8">Handcrafted Products</h2>

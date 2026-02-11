@@ -8,7 +8,14 @@ const sql = postgres(process.env.POSTGRES_URL!, { ssl: 'require' });
 /* ===== PRODUCTS ===== */
 export async function getAllProducts(): Promise<Product[]> {
   try {
-    return await sql<Product[]>`SELECT * FROM products ORDER BY name ASC;`;
+    const data = await sql`SELECT * FROM products ORDER BY name ASC;`;
+    return data.map((product) => ({
+      ...product,
+      price:
+        product.price !== null && product.price !== undefined
+          ? Number(product.price)
+          : undefined,
+    })) as Product[];
   } catch (error) {
     console.error('Error fetching products:', error);
     throw error;
