@@ -6,6 +6,17 @@ import { Product, Artisan } from './definitions';
 const sql = postgres(process.env.POSTGRES_URL!, { ssl: 'require' });
 
 /* ===== PRODUCTS ===== */
+
+export function normalizeProducts(products: Product[]) {
+  return products.map((p) => ({
+    id: p.id,
+    name: p.name,
+    description: p.description ?? undefined,
+    price: p.price ?? undefined,
+    image_url: p.image_url ?? '/placeholder.jpg',
+  }));
+}
+
 export async function getAllProducts(): Promise<Product[]> {
   try {
     const data = await sql`SELECT * FROM products ORDER BY name ASC;`;
@@ -35,6 +46,16 @@ export async function getProductById(id: string): Promise<Product | null> {
 }
 
 /* ===== ARTISANS ===== */
+
+export function normalizeArtisans(artisans: Artisan[]) {
+  return artisans.map((a) => ({
+    id: a.id,
+    name: a.name,
+    bio: a.bio ?? undefined,                 // null → undefined
+    image_url: a.image_url ?? '/placeholder.jpg', // null → placeholder
+  }));
+}
+
 export async function getAllArtisans(): Promise<Artisan[]> {
   try {
     return await sql<Artisan[]>`SELECT * FROM artisans ORDER BY name ASC;`;

@@ -5,8 +5,8 @@ type ProductCardProps = {
   id: string;
   imageSrc: string | null;
   title: string;
-  subtitle?: string;
-  amount?: number;
+  subtitle?: string | null;
+  amount?: number | null;
 };
 
 export function ProductCard({ id, imageSrc, title, subtitle, amount }: ProductCardProps) {
@@ -37,8 +37,8 @@ type ProductCardWrapperProps = {
   products: {
     id: string;
     name: string;
-    description?: string;
-    price?: number;
+    description?: string | null;
+    price?: number | null;
     image_url: string;
   }[];
 };

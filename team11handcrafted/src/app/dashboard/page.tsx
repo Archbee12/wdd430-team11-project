@@ -3,7 +3,7 @@ import '@/app/globals.css';
 import CardWrapper from '@/app/ui/dashboard/cards';
 import ProductCardWrapper from '@/app/ui/dashboard/product-cards';
 import ArtisanCardWrapper from '@/app/ui/dashboard/artisan-cards';
-import { getAllProducts, getAllArtisans } from '@/app/lib/actions';
+import { getAllProducts, getAllArtisans, normalizeProducts, normalizeArtisans } from '@/app/lib/actions';
 
 
 export default async function Page() {
@@ -12,6 +12,9 @@ export default async function Page() {
   const artisans = await getAllArtisans();
   const artisanCount = artisans.length;
   const productCount = products.length;
+
+  const normalizedProducts = normalizeProducts(products);
+  const normalizedArtisans = normalizeArtisans(artisans);
 
   return (
     <main>
@@ -23,13 +26,13 @@ export default async function Page() {
         <div className="product-dashboard">
           <h2 className="text-xl font-semibold mb-4 mt-8">Handcrafted Products</h2>
           {/* Pass products as prop */}
-          <ProductCardWrapper products={products} />
+          <ProductCardWrapper products={normalizedProducts} />
         </div>
 
         <div className="artisan-dashboard">
           <h2 className="text-xl font-semibold mb-4 mt-8">Artisans</h2>
           {/* Pass artisans as prop */}
-          <ArtisanCardWrapper artisans={artisans} />
+          <ArtisanCardWrapper artisans={normalizedArtisans} />
         </div>
       </div>
     </main>
