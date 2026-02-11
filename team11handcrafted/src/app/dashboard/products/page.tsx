@@ -1,10 +1,9 @@
-import { getAllProducts, normalizeProducts } from '@/app/lib/actions';
-import ProductCardWrapper from '@/app/ui/dashboard/product-cards';
-import { inter } from '@/app/ui/fonts';
+import { getAllProducts, normalizeProducts } from "@/app/lib/actions";
+import ProductCardWrapper from "@/app/ui/products/product-cards";
+import { inter } from "@/app/ui/fonts";
 
 export default async function ProductsPage() {
-  const products = await getAllProducts();
-  const normalizedProducts = normalizeProducts(products);
+  const products = await normalizeProducts(await getAllProducts());
 
   return (
     <main>
@@ -12,7 +11,7 @@ export default async function ProductsPage() {
         <h1 className="text-2xl font-bold mb-4">Products</h1>
       </div>
 
-      <ProductCardWrapper products={normalizedProducts} />
+      <ProductCardWrapper products={products} />
     </main>
   );
 }

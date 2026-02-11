@@ -1,15 +1,19 @@
-import Link from 'next/link';
-import { poppins } from '@/app/ui/fonts';
+"use client";
 
-export default function Header() {
+import { poppins } from "@/app/ui/fonts";
+
+type HeaderProps = {
+  userName?: string; // Optional: passed from dashboard page server component
+};
+
+export default function Header({ userName }: HeaderProps) {
   return (
-    <header>
-      <Link href="/dashboard" className="sidenav-logo">
-        <h1 className={poppins.className}>Handcrafted Haven</h1>
-      </Link>
-      <nav>
-        <Link href="/signin">Sign In</Link>
-      </nav>
+    <header className="flex justify-between items-center p-4 bg-gray-100 shadow">
+      <h1 className={poppins.className}>Handcrafted Haven</h1>
+
+      {userName && (
+        <span className="text-lg font-medium">Welcome, {userName}</span>
+      )}
     </header>
   );
 }

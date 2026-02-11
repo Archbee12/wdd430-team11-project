@@ -1,20 +1,20 @@
-// app/lib/actions.ts
-import postgres from 'postgres';
-import { Product, Artisan } from './definitions';
+"use server";
 
-// Create a Postgres client using the same env and SSL as seed/route
-const sql = postgres(process.env.POSTGRES_URL!, { ssl: 'require' });
+import { sql } from "@/app/lib/db";
+import { Product, Artisan } from "./definitions";
 
 /* ===== PRODUCTS ===== */
 
-export function normalizeProducts(products: Product[]) {
-  return products.map((p) => ({
+export async function normalizeProducts(products: Product[]): Promise<Product[]> {
+  return await Promise.all(products.map(async (p) => ({
     id: p.id,
-    name: p.name,
-    description: p.description ?? undefined,
-    price: p.price ?? undefined,
-    image_url: p.image_url ?? '/placeholder.jpg',
-  }));
+    artisan_id: p.artisan_id,
+    name: p.name ?? "Untitled Product",
+    description: p.description ?? "No description provided",
+    price: p.price ?? 0,
+    rating: p.rating ?? 0,
+    image_url: p.image_url ?? "/placeholder.jpg",
+  })));
 }
 
 export async function getAllProducts(): Promise<Product[]> {
@@ -28,7 +28,7 @@ export async function getAllProducts(): Promise<Product[]> {
           : undefined,
     })) as Product[];
   } catch (error) {
-    console.error('Error fetching products:', error);
+    console.error("Error fetching products:", error);
     throw error;
   }
 }
@@ -40,27 +40,68 @@ export async function getProductById(id: string): Promise<Product | null> {
     `;
     return product ?? null;
   } catch (error) {
-    console.error('Error fetching product by ID:', error);
+    console.error("Error fetching product by ID:", error);
     return null;
   }
 }
 
+// Create product
+export async function createProduct(product: {
+  name: string;
+  description: string;
+  price: number;
+  artisan_id: string;
+  image_url: string;
+}) {
+  const [result] = await sql<Product[]>`
+    INSERT INTO products (name, description, price, artisan_id, image_url)
+    VALUES (${product.name}, ${product.description}, ${product.price}, ${product.artisan_id}, ${product.image_url})
+    RETURNING *;
+  `;
+  return result;
+}
+
+//  update & delete
+// export async function updateProduct(
+//   id: string,
+//   updates: Partial<Omit<Product, "id" | "artisan_id">>
+// ): Promise<Product> {
+//   const existing = await getProductById(id);
+//   const updated = { ...existing, ...updates };
+//   const [result] = await sql<Product[]>`
+//     UPDATE products SET
+//       name = ${updated.name},
+//       description = ${updated.description},
+//       price = ${updated.price},
+//       rating = ${updated.rating},
+//       image_url = ${updated.image_url}
+//     WHERE id = ${id}
+//     RETURNING *;
+//   `;
+//   return normalizeProducts([result])[0];
+// }
+
+// export async function deleteProduct(id: string) {
+//   await sql`DELETE FROM products WHERE id = ${id};`;
+// }
+
 /* ===== ARTISANS ===== */
 
-export function normalizeArtisans(artisans: Artisan[]) {
-  return artisans.map((a) => ({
+export async function normalizeArtisans(artisans: Artisan[]): Promise<Artisan[]> {
+  return await Promise.all(artisans.map(async (a) => ({
     id: a.id,
-    name: a.name,
-    bio: a.bio ?? undefined,                 // null → undefined
-    image_url: a.image_url ?? '/placeholder.jpg', // null → placeholder
-  }));
+    name: a.name ?? "Unnamed Artisan",
+    bio: a.bio ?? "No bio available",
+    location: a.location ?? "Unknown",
+    image_url: a.image_url ?? "/placeholder.jpg",
+  })));
 }
 
 export async function getAllArtisans(): Promise<Artisan[]> {
   try {
     return await sql<Artisan[]>`SELECT * FROM artisans ORDER BY name ASC;`;
   } catch (error) {
-    console.error('Error fetching artisans:', error);
+    console.error("Error fetching artisans:", error);
     throw error;
   }
 }
@@ -72,7 +113,7 @@ export async function getArtisanById(id: string): Promise<Artisan | null> {
     `;
     return artisan ?? null;
   } catch (error) {
-    console.error('Error fetching artisan by ID:', error);
+    console.error("Error fetching artisan by ID:", error);
     return null;
   }
 }

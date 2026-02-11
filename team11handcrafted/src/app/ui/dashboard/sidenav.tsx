@@ -1,5 +1,5 @@
 import NavLinks from '@/app/ui/dashboard/nav-links';
-// import Link from 'next/link';
+import Link from 'next/link';
 
 export default function SideNav() {
   return (
@@ -12,9 +12,9 @@ export default function SideNav() {
 
       <div className="nav-bottom">
         
-        <button className="nav-link signout">
+        <Link href="/" className="nav-link signout">
           Sign Out
-        </button>
+        </Link>
       </div>
     </nav>
   );

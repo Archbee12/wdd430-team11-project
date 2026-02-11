@@ -3,10 +3,10 @@ import Link from 'next/link';
 
 type ProductCardProps = {
   id: string;
-  imageSrc: string | null;
+  imageSrc: string;
   title: string;
-  subtitle?: string | null;
-  amount?: number | null;
+  subtitle: string;
+  amount: number;
 };
 
 export function ProductCard({ id, imageSrc, title, subtitle, amount }: ProductCardProps) {
@@ -14,17 +14,12 @@ export function ProductCard({ id, imageSrc, title, subtitle, amount }: ProductCa
     <Link href={`/dashboard/products/${id}`}>
       <div className="product-card cursor-pointer hover:shadow-lg transition">
         <div className="product-card__image">
-          <Image src={imageSrc || '/placeholder.jpg'} 
-            alt={title} 
-            width={300} 
-            height={200} 
-          />
+          <Image src={imageSrc} alt={title} width={300} height={200} />
         </div>
-
         <div className="product-card__content">
           <h3>{title}</h3>
-          {subtitle && <p className="subtitle">{subtitle}</p>}
-          {amount !== undefined && <p className="amount">${amount?.toFixed(2)}</p>}
+          <p className="subtitle">{subtitle}</p>
+          <p className="amount">${amount.toFixed(2)}</p>
         </div>
       </div>
     </Link>
@@ -37,8 +32,8 @@ type ProductCardWrapperProps = {
   products: {
     id: string;
     name: string;
-    description?: string | null;
-    price?: number | null;
+    description: string;
+    price: number;
     image_url: string;
   }[];
 };

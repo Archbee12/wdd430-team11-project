@@ -4,9 +4,9 @@ import Image from 'next/image';
 
 type ArtisanCardProps = {
   id: string;
-  imageSrc: string | null;
+  imageSrc: string;
   title: string;
-  bio?: string | null;
+  bio: string;
 };
 
 export function ArtisanCard({ id, imageSrc, title, bio }: ArtisanCardProps) {
@@ -14,11 +14,11 @@ export function ArtisanCard({ id, imageSrc, title, bio }: ArtisanCardProps) {
     <Link href={`/dashboard/artisans/${id}`}>
       <div className="artisan-card cursor-pointer hover:shadow-lg transition">
         <div className="artisan-card__image">
-          <Image src={imageSrc || '/placeholder.jpg'} alt={title} width={300} height={200} />
+          <Image src={imageSrc} alt={title} width={300} height={200} />
         </div>
         <div className="artisan-card__content">
           <h3>{title}</h3>
-          {bio && <p className="subtitle">{bio.slice(0, 50)}...</p>} {/* snippet */}
+          <p className="subtitle">{bio.slice(0, 50)}...</p>
         </div>
       </div>
     </Link>
@@ -29,7 +29,7 @@ type ArtisanCardWrapperProps = {
   artisans: {
     id: string;
     name: string;
-    bio?: string | null;
+    bio: string;
     image_url: string;
   }[];
 };
