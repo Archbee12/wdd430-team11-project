@@ -12,9 +12,14 @@ export async function getCurrentUser() {
   `;
   if (!session) return null;
 
-  const [user] = await sql<{ id: string; name: string }[]>`
-    SELECT id, name FROM users WHERE id = ${session.user_id};
+  const [user] = await sql<{
+    id: string;
+    name: string;
+    role: string;
+  }[]>`
+    SELECT id, name, role FROM users WHERE id = ${session.user_id};
   `;
+
 
   return user ?? null;
 }

@@ -2,6 +2,7 @@
 
 import { sql } from "@/app/lib/db";
 import { Product, Artisan } from "./definitions";
+import { getCurrentUser } from "./session";
 
 /* ===== PRODUCTS ===== */
 
@@ -45,6 +46,7 @@ export async function getProductById(id: string): Promise<Product | null> {
   }
 }
 
+
 // Create product
 export async function createProduct(product: {
   name: string;
@@ -53,9 +55,18 @@ export async function createProduct(product: {
   artisan_id: string;
   image_url: string;
 }) {
+  const user = await getCurrentUser();
+  if (!user) {
+    throw new Error("Not authenticated  - please log in.");
+  }
+
+  if (user.role !== "artisan" && user.role !== "seller") {
+    throw new Error("Unauthorized - only artisans and sellers can create products.");
+  }
+
   const [result] = await sql<Product[]>`
     INSERT INTO products (name, description, price, artisan_id, image_url)
-    VALUES (${product.name}, ${product.description}, ${product.price}, ${product.artisan_id}, ${product.image_url})
+    VALUES (${product.name}, ${product.description}, ${product.price}, ${user.id}, ${product.image_url})
     RETURNING *;
   `;
   return result;
