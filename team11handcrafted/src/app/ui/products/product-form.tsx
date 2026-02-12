@@ -1,17 +1,28 @@
 "use client";
 
 import { useState } from "react";
-import { createProduct } from "@/app/lib/actions";
+import { createProduct, updateProduct, deleteProduct } from "@/app/lib/actions";
 import styles from "./product-form.module.css";
+import Image from "next/image";
 
-type ProductFormProps = {
-  artisanId: string;
+type Product = {
+  id: string;
+  name: string;
+  description: string;
+  price: number;
+  image_url: string;
+  artisan_id: string;
 };
 
-export default function ProductForm({ artisanId }: ProductFormProps) {
-  const [name, setName] = useState("");
-  const [description, setDescription] = useState("");
-  const [price, setPrice] = useState<number | "">("");
+type ProductFormProps = {
+  artisan_id: string;
+  product?: Product;
+};
+
+export default function ProductForm({ artisan_id, product }: ProductFormProps) {
+  const [name, setName] = useState(product?.name ?? "");
+  const [description, setDescription] = useState(product?.description ?? "");
+  const [price, setPrice] = useState<number | "">(product?.price ?? "");
   const [image, setImage] = useState<File | null>(null);
   const [message, setMessage] = useState("");
 
@@ -24,26 +35,79 @@ export default function ProductForm({ artisanId }: ProductFormProps) {
       return;
     }
 
-    await createProduct({
-      artisan_id: artisanId,
-      name,
-      description,
-      price: Number(price),
-      image_url: image ? URL.createObjectURL(image) : "/placeholder.jpg",
-    });
+    // Use existing image_url unless a new file is selected
+    let imageUrl = product?.image_url ?? "/placeholder.jpg";
 
-    setMessage("Product created successfully!");
+    if (image) {
+      const formData = new FormData();
+      formData.append("file", image);
 
-    setName("");
-    setDescription("");
-    setPrice("");
-    setImage(null);
+      const uploadRes = await fetch("/api/uploads", {
+        method: "POST",
+        body: formData,
+      });
+
+      if (!uploadRes.ok) {
+        setMessage("Image upload failed. Please try again.");
+        return;
+      }
+
+      const data = await uploadRes.json();
+      imageUrl = data.imageUrl;
+    }
+
+    try {
+      if (product?.id) {
+        // Update
+        await updateProduct(product.id, {
+          name,
+          description,
+          price: Number(price),
+          image_url: imageUrl,
+        });
+        setMessage("Product updated successfully!");
+      } else {
+        // Create
+        await createProduct({
+          artisan_id: artisan_id,
+          name,
+          description,
+          price: Number(price),
+          image_url: imageUrl,
+        });
+        setMessage("Product created successfully!");
+
+        setName("");
+        setDescription("");
+        setPrice("");
+        setImage(null);
+      }
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : "An error occurred. Please try again.";
+      setMessage(errorMessage);
+    }
+  };
+
+  const handleDelete = async () => {
+    if (!product) return;
+    const confirmed = confirm("Are you sure you want to delete this product?");
+    if (!confirmed) return;
+
+    try {
+      await deleteProduct(product.id);
+      setMessage("Product deleted successfully!");
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : "Failed to delete product";
+      setMessage(errorMessage);
+    }
   };
 
   return (
     <div className={styles.wrapper}>
       <form onSubmit={handleSubmit} className={styles.formCard}>
-        <h2 className={styles.title}>Create New Product</h2>
+        <h2 className={styles.title}>
+          {product ? "Edit Product" : "Create New Product"}
+        </h2>
 
         {message && <p className={styles.message}>{message}</p>}
 
@@ -83,11 +147,29 @@ export default function ProductForm({ artisanId }: ProductFormProps) {
             type="file"
             onChange={(e) => setImage(e.target.files?.[0] ?? null)}
           />
+          {/* Show current image from database */}
+          <Image
+            src={image ? URL.createObjectURL(image) : product?.image_url ?? "/placeholder.jpg"}
+            alt="Product Image"
+            width={200}
+            height={200}
+            className={styles.imagePreview}
+          />
         </div>
 
         <button type="submit" className={styles.button}>
-          Create Product
+          {product ? "Update Product" : "Create Product"}
         </button>
+
+        {product && (
+          <button
+            type="button"
+            className={`${styles.button} ${styles.deleteButton}`}
+            onClick={handleDelete}
+          >
+            Delete Product
+          </button>
+        )}
       </form>
     </div>
   );

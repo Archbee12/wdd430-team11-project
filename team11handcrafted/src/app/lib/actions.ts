@@ -37,7 +37,17 @@ export async function getAllProducts(): Promise<Product[]> {
 export async function getProductById(id: string): Promise<Product | null> {
   try {
     const [product] = await sql<Product[]>`
-      SELECT * FROM products WHERE id = ${id};
+      SELECT p.id,
+        p.name,
+        p.description,
+        p.price,
+        p.image_url,
+        p.rating,
+        u.name AS artisan_name
+      FROM products p
+      LEFT JOIN users u
+        ON p.artisan_id = u.id
+      WHERE p.id = ${id};
     `;
     return product ?? null;
   } catch (error) {
@@ -72,29 +82,53 @@ export async function createProduct(product: {
   return result;
 }
 
-//  update & delete
-// export async function updateProduct(
-//   id: string,
-//   updates: Partial<Omit<Product, "id" | "artisan_id">>
-// ): Promise<Product> {
-//   const existing = await getProductById(id);
-//   const updated = { ...existing, ...updates };
-//   const [result] = await sql<Product[]>`
-//     UPDATE products SET
-//       name = ${updated.name},
-//       description = ${updated.description},
-//       price = ${updated.price},
-//       rating = ${updated.rating},
-//       image_url = ${updated.image_url}
-//     WHERE id = ${id}
-//     RETURNING *;
-//   `;
-//   return normalizeProducts([result])[0];
-// }
+// ---------------- Update Product ----------------
+export async function updateProduct(
+  id: string,
+  updates: Partial<Omit<Product, "id" | "artisan_id">>
+): Promise<Product | null> {
+  const user = await getCurrentUser();
+  if (!user) throw new Error("Not authenticated");
 
-// export async function deleteProduct(id: string) {
-//   await sql`DELETE FROM products WHERE id = ${id};`;
-// }
+  // Optional: you can enforce only artisan/seller can update their own products
+  const existing = await getProductById(id);
+  if (!existing) return null;
+
+  if (user.id !== existing.artisan_id && user.role !== "admin") {
+    throw new Error("Unauthorized to update this product");
+  }
+
+  const [result] = await sql<Product[]>`
+    UPDATE products SET
+      name = ${updates.name ?? existing.name},
+      description = ${updates.description ?? existing.description},
+      price = ${updates.price ?? existing.price},
+      rating = ${updates.rating ?? existing.rating},
+      image_url = ${updates.image_url ?? existing.image_url}
+    WHERE id = ${id}
+    RETURNING *;
+  `;
+
+  return result ?? null;
+}
+
+// ---------------- Delete Product ----------------
+export async function deleteProduct(id: string): Promise<void> {
+  const user = await getCurrentUser();
+  if (!user) throw new Error("Not authenticated");
+
+  const existing = await getProductById(id);
+  if (!existing) throw new Error("Product not found");
+
+  if (user.id !== existing.artisan_id && user.role !== "admin") {
+    throw new Error("Unauthorized to delete this product");
+  }
+
+  await sql`
+    DELETE FROM products WHERE id = ${id};
+  `;
+}
+
 
 /* ===== ARTISANS ===== */
 
@@ -109,22 +143,60 @@ export async function normalizeArtisans(artisans: Artisan[]): Promise<Artisan[]>
 }
 
 export async function getAllArtisans(): Promise<Artisan[]> {
-  try {
-    return await sql<Artisan[]>`SELECT * FROM artisans ORDER BY name ASC;`;
-  } catch (error) {
-    console.error("Error fetching artisans:", error);
-    throw error;
-  }
+  const artisans = await sql<Artisan[]>`
+    SELECT 
+      u.id,
+      u.name,
+      a.bio,
+      a.location,
+      a.image_url
+    FROM users u
+    LEFT JOIN artisans a ON a.id = u.id
+    WHERE u.role = 'artisan'
+    ORDER BY u.name;
+  `;
+  return artisans;
 }
 
+
 export async function getArtisanById(id: string): Promise<Artisan | null> {
-  try {
-    const [artisan] = await sql<Artisan[]>`
-      SELECT * FROM artisans WHERE id = ${id};
-    `;
-    return artisan ?? null;
-  } catch (error) {
-    console.error("Error fetching artisan by ID:", error);
-    return null;
-  }
+  const [artisan] = await sql<Artisan[]>`
+    SELECT 
+      u.id,
+      u.name,
+      a.bio,
+      a.location,
+      a.image_url
+    FROM users u
+    LEFT JOIN artisans a ON a.id = u.id
+    WHERE u.role = 'artisan' AND u.id = ${id};
+  `;
+  return artisan ?? null;
 }
+
+// export async function updateArtisan(
+//   id: string,
+//   data: Partial<{ name: string; bio: string; location: string; image_url: string }>
+// ): Promise<Artisan> {
+//   const { name, bio, location, image_url } = data;
+
+//   // Execute the update query
+//   // Correct way:
+//   const result = await sql<Artisan[]>`
+//     UPDATE artisans
+//     SET
+//       name = COALESCE(${name}, name),
+//       bio = COALESCE(${bio}, bio),
+//       location = COALESCE(${location}, location),
+//       image_url = COALESCE(${image_url}, image_url)
+//     WHERE id = ${id}
+//     RETURNING id, name, bio, location, image_url;
+//   `;
+
+//   const updated = result[0];
+
+//   if (!updated) throw new Error("Artisan not found or update failed");
+
+//   return updated;
+
+// }

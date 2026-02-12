@@ -20,7 +20,9 @@ export default async function CreateProductPage() {
   return (
     <main className={`${inter.className} p-4`}>
       <h1 className="text-2xl font-bold mb-6">Create a New Product</h1>
-      <ProductForm artisanId={user.id} />
+      <ProductForm artisan_id={user.id} />
     </main>
   );
 }
+
+

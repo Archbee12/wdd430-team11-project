@@ -46,6 +46,18 @@ export async function signupUser(data: z.infer<typeof signupSchema>) {
     RETURNING id;
   `;
 
+  if (role === "artisan") {
+    await sql`
+      INSERT INTO artisans (id, name, bio, location, image_url)
+      VALUES (
+      ${user.id}, 
+      ${name}, 
+      'Bio not set yet', 
+      'Unknown', 
+      '/images/artisans/placeholder.jpg');
+    `;
+  }
+
   const token = crypto.randomUUID();
 
   (await cookies()).set("session", token, {
@@ -59,7 +71,11 @@ export async function signupUser(data: z.infer<typeof signupSchema>) {
     VALUES (${user.id}, ${token});
   `;
 
-  redirect("/dashboard");
+  if (role === "artisan") {
+    redirect(`/dashboard/artisans/${user.id}/edit`);
+  } else {
+    redirect("/dashboard");
+  }
 }
 
 /* ===============================

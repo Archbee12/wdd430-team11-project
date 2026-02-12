@@ -13,7 +13,8 @@ export type Product = {
   description: string; 
   price: number;  
   rating: number;
-  image_url: string; 
+  image_url: string;
+  artisan_name?: string;  // Add this line
 };
 
 export type User = {
