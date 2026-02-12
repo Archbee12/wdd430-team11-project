@@ -174,29 +174,21 @@ export async function getArtisanById(id: string): Promise<Artisan | null> {
   return artisan ?? null;
 }
 
-// export async function updateArtisan(
-//   id: string,
-//   data: Partial<{ name: string; bio: string; location: string; image_url: string }>
-// ): Promise<Artisan> {
-//   const { name, bio, location, image_url } = data;
+export async function updateArtisan(
+  id: string,
+  data: Partial<{ name: string; bio: string; location: string; image_url: string }>
+): Promise<Artisan> {
+  const { name, bio, location, image_url } = data;
 
-//   // Execute the update query
-//   // Correct way:
-//   const result = await sql<Artisan[]>`
-//     UPDATE artisans
-//     SET
-//       name = COALESCE(${name}, name),
-//       bio = COALESCE(${bio}, bio),
-//       location = COALESCE(${location}, location),
-//       image_url = COALESCE(${image_url}, image_url)
-//     WHERE id = ${id}
-//     RETURNING id, name, bio, location, image_url;
-//   `;
-
-//   const updated = result[0];
-
-//   if (!updated) throw new Error("Artisan not found or update failed");
-
-//   return updated;
-
-// }
+  const [result] = await sql<Artisan[]>`
+    UPDATE artisans
+    SET
+      name = COALESCE(${name || null}, name),
+      bio = COALESCE(${bio || null}, bio),
+      location = COALESCE(${location || null}, location),
+      image_url = COALESCE(${image_url || null}, image_url)
+    WHERE id = ${id}
+    RETURNING id, name, bio, location, image_url
+  `;
+  return result;
+}

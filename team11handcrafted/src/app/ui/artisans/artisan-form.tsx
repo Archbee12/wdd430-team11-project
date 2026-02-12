@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-// import { updateArtisan } from "@/app/lib/actions";
+import { updateArtisan } from "@/app/lib/actions";
 import Image from "next/image";
 
 type Artisan = {
