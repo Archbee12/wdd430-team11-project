@@ -38,6 +38,7 @@ export async function getProductById(id: string): Promise<Product | null> {
   try {
     const [product] = await sql<Product[]>`
       SELECT p.id,
+        p.artisan_id,
         p.name,
         p.description,
         p.price,
