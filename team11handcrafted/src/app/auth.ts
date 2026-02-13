@@ -62,6 +62,8 @@ export async function signupUser(data: z.infer<typeof signupSchema>) {
 
   (await cookies()).set("session", token, {
     httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
     path: "/",
     maxAge: 60 * 60 * 24,
   });
@@ -123,6 +125,18 @@ export async function loginUser(data: z.infer<typeof loginSchema>) {
 ================================ */
 
 export async function logoutUser() {
-  (await cookies()).set("session", "", { maxAge: 0 });
+  const cookieStore = await cookies();
+  const token = cookieStore.get("session")?.value;
+
+  if (token) {
+    await sql`
+      DELETE FROM sessions
+      WHERE token = ${token};
+    `;
+  }
+
+  cookieStore.delete("session");
+
   redirect("/");
 }
+

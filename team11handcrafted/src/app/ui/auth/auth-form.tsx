@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import { z } from "zod";
 import styles from "./auth-form.module.css";
 import "@/app/globals.css";
@@ -43,7 +42,6 @@ type AuthFormProps =
 
 export default function AuthForm({ type, action }: AuthFormProps) {
   const [error, setError] = useState<string | null>(null);
-  const router = useRouter();
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -70,7 +68,6 @@ export default function AuthForm({ type, action }: AuthFormProps) {
         await action(parsed);
       }
 
-      router.push("/dashboard");
     } catch (err) {
       if (err instanceof z.ZodError) {
         setError(err.issues[0].message);

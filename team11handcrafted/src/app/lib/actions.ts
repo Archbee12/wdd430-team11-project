@@ -14,7 +14,7 @@ export async function normalizeProducts(products: Product[]): Promise<Product[]>
     description: p.description ?? "No description provided",
     price: p.price ?? 0,
     rating: p.rating ?? 0,
-    image_url: p.image_url ?? "/placeholder.jpg",
+    image_url: p.image_url ?? "/images/products/placeholder.jpg",
   })));
 }
 
@@ -139,7 +139,7 @@ export async function normalizeArtisans(artisans: Artisan[]): Promise<Artisan[]>
     name: a.name ?? "Unnamed Artisan",
     bio: a.bio ?? "No bio available",
     location: a.location ?? "Unknown",
-    image_url: a.image_url ?? "/placeholder.jpg",
+    image_url: a.image_url ?? "/images/artisans/placeholder.jpg",
   })));
 }
 
@@ -175,29 +175,44 @@ export async function getArtisanById(id: string): Promise<Artisan | null> {
   return artisan ?? null;
 }
 
-// export async function updateArtisan(
-//   id: string,
-//   data: Partial<{ name: string; bio: string; location: string; image_url: string }>
-// ): Promise<Artisan> {
-//   const { name, bio, location, image_url } = data;
+// ------- Update Artisan -----------
+export async function updateArtisan(
+  id: string,
+  updates: Partial<{
+    name: string;
+    bio: string;
+    location: string;
+    image_url: string;
+  }>
+): Promise<Artisan | null> {
+  const user = await getCurrentUser();
+  if (!user) throw new Error("Not authenticated");
 
-//   // Execute the update query
-//   // Correct way:
-//   const result = await sql<Artisan[]>`
-//     UPDATE artisans
-//     SET
-//       name = COALESCE(${name}, name),
-//       bio = COALESCE(${bio}, bio),
-//       location = COALESCE(${location}, location),
-//       image_url = COALESCE(${image_url}, image_url)
-//     WHERE id = ${id}
-//     RETURNING id, name, bio, location, image_url;
-//   `;
+  const existing = await getArtisanById(id);
+  if (!existing) throw new Error("Artisan not found");
 
-//   const updated = result[0];
+  // 🔐 Authorization (same logic as products)
+  if (user.id !== id && user.role !== "admin") {
+    throw new Error("Unauthorized to update this artisan");
+  }
 
-//   if (!updated) throw new Error("Artisan not found or update failed");
+  // Update users table (name)
+  await sql`
+    UPDATE users
+    SET name = ${updates.name ?? existing.name}
+    WHERE id = ${id};
+  `;
 
-//   return updated;
+  // Update artisans table (bio, location, image)
+  await sql`
+    UPDATE artisans
+    SET
+      bio = ${updates.bio ?? existing.bio},
+      location = ${updates.location ?? existing.location},
+      image_url = ${updates.image_url ?? existing.image_url}
+    WHERE id = ${id};
+  `;
 
-// }
+  // Return updated artisan
+  return await getArtisanById(id);
+}
