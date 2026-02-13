@@ -14,7 +14,7 @@ export async function normalizeProducts(products: Product[]): Promise<Product[]>
     description: p.description ?? "No description provided",
     price: p.price ?? 0,
     rating: p.rating ?? 0,
-    image_url: p.image_url ?? "/placeholder.jpg",
+    image_url: p.image_url ?? "/images/products/placeholder.jpg",
   })));
 }
 
@@ -38,6 +38,7 @@ export async function getProductById(id: string): Promise<Product | null> {
   try {
     const [product] = await sql<Product[]>`
       SELECT p.id,
+        p.artisan_id,
         p.name,
         p.description,
         p.price,
@@ -138,7 +139,7 @@ export async function normalizeArtisans(artisans: Artisan[]): Promise<Artisan[]>
     name: a.name ?? "Unnamed Artisan",
     bio: a.bio ?? "No bio available",
     location: a.location ?? "Unknown",
-    image_url: a.image_url ?? "/placeholder.jpg",
+    image_url: a.image_url ?? "/images/artisans/placeholder.jpg",
   })));
 }
 
@@ -174,21 +175,44 @@ export async function getArtisanById(id: string): Promise<Artisan | null> {
   return artisan ?? null;
 }
 
+// ------- Update Artisan -----------
 export async function updateArtisan(
   id: string,
-  data: Partial<{ name: string; bio: string; location: string; image_url: string }>
-): Promise<Artisan> {
-  const { name, bio, location, image_url } = data;
+  updates: Partial<{
+    name: string;
+    bio: string;
+    location: string;
+    image_url: string;
+  }>
+): Promise<Artisan | null> {
+  const user = await getCurrentUser();
+  if (!user) throw new Error("Not authenticated");
 
-  const [result] = await sql<Artisan[]>`
+  const existing = await getArtisanById(id);
+  if (!existing) throw new Error("Artisan not found");
+
+  // 🔐 Authorization (same logic as products)
+  if (user.id !== id && user.role !== "admin") {
+    throw new Error("Unauthorized to update this artisan");
+  }
+
+  // Update users table (name)
+  await sql`
+    UPDATE users
+    SET name = ${updates.name ?? existing.name}
+    WHERE id = ${id};
+  `;
+
+  // Update artisans table (bio, location, image)
+  await sql`
     UPDATE artisans
     SET
-      name = COALESCE(${name || null}, name),
-      bio = COALESCE(${bio || null}, bio),
-      location = COALESCE(${location || null}, location),
-      image_url = COALESCE(${image_url || null}, image_url)
-    WHERE id = ${id}
-    RETURNING id, name, bio, location, image_url
+      bio = ${updates.bio ?? existing.bio},
+      location = ${updates.location ?? existing.location},
+      image_url = ${updates.image_url ?? existing.image_url}
+    WHERE id = ${id};
   `;
-  return result;
+
+  // Return updated artisan
+  return await getArtisanById(id);
 }
