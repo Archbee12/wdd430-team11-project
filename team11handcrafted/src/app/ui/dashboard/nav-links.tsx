@@ -3,10 +3,18 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
+import {
+  HomeIcon,
+  UserGroupIcon,
+  ShoppingBagIcon,
+  ArrowLeftEndOnRectangleIcon,
+} from '@heroicons/react/24/outline';
+import { logoutUser } from '@/app/auth';
+
 const links = [
-  { name: 'Home', href: '/dashboard' },
-  { name: 'Artisans', href: '/dashboard/artisans' },
-  { name: 'Products', href: '/dashboard/products' },
+  { name: 'Home', href: '/dashboard', icon: HomeIcon},
+  { name: 'Artisans', href: '/dashboard/artisans', icon: UserGroupIcon },
+  { name: 'Products', href: '/dashboard/products', icon: ShoppingBagIcon },
 ];
 
 export default function NavLinks() {
@@ -18,6 +26,7 @@ export default function NavLinks() {
       <ul className="nav-links">
         {links.map((link) => {
           const isActive = pathname === link.href;
+          const Icon = link.icon;
 
           return (
             <li key={link.name}>
@@ -25,7 +34,8 @@ export default function NavLinks() {
                 href={link.href}
                 className={`nav-link ${isActive ? 'active' : ''}`}
               >
-                {link.name}
+                <Icon className="nav-icon" />
+                <span className="nav-text">{link.name}</span>
               </Link>
             </li>
           );
@@ -34,6 +44,16 @@ export default function NavLinks() {
 
       {/* Sidenav divider */}
       <div className="nav-divider" />
+
+      <div className="nav-bottom">
+        
+        <form action={logoutUser} >
+          <button type="submit" className="nav-link signout">
+            <ArrowLeftEndOnRectangleIcon className="nav-icon" />
+            <span className="nav-text">Sign Out</span>
+          </button>
+        </form>
+      </div>
       
     </nav>
   );

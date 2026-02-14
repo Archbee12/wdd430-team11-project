@@ -32,8 +32,7 @@ export default async function ArtisanDetailPage({ params }: Props) {
           {artisan.location && <p className="hero-location">{artisan.location}</p>}
 
           <div className="hero-actions">
-            <button className="contact-btn">Contact Artisan</button>
-            <button className="view-products-btn">View Products</button>
+            <button className="update-profile-btn">Update Profile</button>
           </div>
         </div>
       </section>

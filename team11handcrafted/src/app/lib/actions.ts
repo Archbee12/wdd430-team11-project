@@ -216,3 +216,21 @@ export async function updateArtisan(
   // Return updated artisan
   return await getArtisanById(id);
 }
+
+// ==== Get Product by Artisan ID ====
+export async function getProductsByArtisanId(artisanId: string) {
+  const data = await sql<Product[]>`
+    SELECT p.id, p.artisan_id, p.name, p.description, p.price, p.rating, p.image_url
+    FROM products p
+    WHERE p.artisan_id = ${artisanId}
+    ORDER BY p.name ASC;
+  `;
+  return data.map((product) => ({
+    ...product,
+    price:
+      product.price !== null && product.price !== undefined
+        ? Number(product.price)
+        : 0,
+  }));
+}
+

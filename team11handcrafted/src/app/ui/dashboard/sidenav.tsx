@@ -1,5 +1,4 @@
 import NavLinks from '@/app/ui/dashboard/nav-links';
-import  { logoutUser } from '@/app/auth';
 
 export default function SideNav() {
   return (
@@ -8,16 +7,7 @@ export default function SideNav() {
         Haven Handcraft
       </Link> */}
 
-      <NavLinks />
-
-      <div className="nav-bottom">
-        
-        <form action={logoutUser} >
-          <button type="submit" className="nav-link signout">
-            Sign Out
-          </button>
-        </form>
-      </div>
+      <NavLinks />      
     </nav>
   );
 }

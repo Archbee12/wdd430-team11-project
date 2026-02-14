@@ -53,6 +53,92 @@ header nav a:hover {
   opacity: 0.8;
 }
 
+.relative button {
+  background: none;
+  border: none;
+  padding: 0;
+}
+
+.profile-btn {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+.profile-icon {
+  width: 48px;
+  height: 48px;
+  color: var(--accent1);
+  background-color: none;
+}
+
+.profile-icon:hover {
+  color: var(--secondary);
+}
+
+.profile-panel {
+  position: absolute;
+  top: 90px;
+  right: 10px;
+  width: 180px;
+  background: var(--primary);
+  border-radius: 0.75rem;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  z-index: 100;
+  animation: fadeIn 0.2s ease;
+}
+
+.profile-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 600;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid #eee;
+}
+
+.profile-avatar {
+  width: 30px;
+  height: 30px;
+  color: var(--accent2);
+}
+
+.profile-link {
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.5rem;
+  transition: background 0.2s ease;
+}
+
+.profile-link:hover {
+  background-color: var(--accent1);
+}
+
+.cart-icon {
+  width: 26px;
+  height: 26px;
+  color: var(--primary);
+}
+
+.cart-icon:hover {
+  color: var(--secondary);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
 /* ======= FOOTER ======== */
 
 .dashboard-footer {
@@ -143,6 +229,12 @@ header nav a:hover {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+}
+
+.nav-icon {
+  width: 22px;
+  height: 22px;
+  margin-right: 0.75rem;
 }
 
 /* Navigation link */
@@ -365,6 +457,23 @@ h2 {
   vertical-align: top;
 }
 
+/* ==== Update Page ======= */
+.update-profile-btn {
+  width: 240px;
+  padding: 0.75rem 1.5rem;
+  font-weight: 600;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  text-align: center;
+  background-color: var(--secondary);
+  color: white;
+  transition: background-color 0.2s ease;
+}
+
+.update-profile-btn:hover {
+  background-color: var(--primary);
+}
+
 /* ========= Details Page ========= */
 
 .hero-detail {
@@ -385,14 +494,16 @@ h2 {
 }
 
 .hero-image img {
-  /* width: 320px;
-  height: 296px; */
+  width: 320px;
+  height: 296px;
   object-fit: contain;
   border-radius: 0.75rem;
+    
 }
 
 .hero-info {
   display: flex;
+  align-items: center;
   flex-direction: column;
   gap: 1rem;
 }
@@ -415,7 +526,6 @@ h2 {
   color: white;
 }
 
-
 .buy-now-btn:hover {
   background-color: var(--secondary);
 }
@@ -436,8 +546,6 @@ h2 {
     padding: 2rem 3rem;
   }
 }
-
-
 
 /* ======= RESPONSIVE (MOBILE) ======= */
 
@@ -462,6 +570,7 @@ h2 {
   }
 
   .nav-container {
+    align-items: center;
     flex-direction: row;
     width: 100%;
   }
@@ -470,6 +579,15 @@ h2 {
     flex-direction: row;
     gap: 0.75rem;
     flex-wrap: nowrap;
+    flex: 1;
+  }
+
+  .nav-icon {
+    margin-right: 0
+  }
+
+  .nav-text {
+    display: none;
   }
 
   .nav-divider {
