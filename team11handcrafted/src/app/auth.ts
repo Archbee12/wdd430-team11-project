@@ -14,7 +14,7 @@ const signupSchema = z.object({
   name: z.string().min(1),
   email: z.string().email(),
   password: z.string().min(6),
-  role: z.enum(["buyer", "seller", "artisan"]),
+  role: z.enum(["buyer", "artisan"]),
 });
 
 const loginSchema = z.object({
@@ -90,8 +90,9 @@ export async function loginUser(data: z.infer<typeof loginSchema>){
   const [user] = await sql<{
     id: string;
     password_hash: string;
+    role: string;
   }[]>`
-    SELECT id, password_hash FROM users WHERE email = ${email};
+    SELECT id, password_hash, role FROM users WHERE email = ${email};
   `;
 
   if (!user) {
@@ -116,6 +117,10 @@ export async function loginUser(data: z.infer<typeof loginSchema>){
     INSERT INTO sessions (user_id, token)
     VALUES (${user.id}, ${token});
   `;
+
+  if (user.role === "admin") {
+    redirect("/dashboard/admin");
+  }
 
   redirect("/dashboard");
 }

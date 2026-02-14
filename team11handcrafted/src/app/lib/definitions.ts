@@ -22,6 +22,6 @@ export type User = {
   name: string;
   email: string;
   password_hash: string;
-  role: "artisan" | "seller" | "buyer";
+  role: "artisan" | "buyer" | "admin";
 };
 

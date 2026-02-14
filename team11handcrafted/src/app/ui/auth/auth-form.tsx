@@ -14,7 +14,7 @@ export const signupSchema = z.object({
   name: z.string().min(1, "Name is required"),
   email: z.string().email("Invalid email"),
   password: z.string().min(6, "Password must be at least 6 characters"),
-  role: z.enum(["buyer", "seller", "artisan"]),
+  role: z.enum(["buyer", "artisan"]),
 });
 
 export const loginSchema = z.object({
@@ -110,7 +110,6 @@ export default function AuthForm({ type, action }: AuthFormProps) {
               <label className={styles.label}>Role</label>
               <select name="role" className={styles.select}>
                 <option value="buyer">Buyer</option>
-                <option value="seller">Seller</option>
                 <option value="artisan">Artisan</option>
               </select>
             </div>

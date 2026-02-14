@@ -71,8 +71,8 @@ export async function createProduct(product: {
     throw new Error("Not authenticated  - please log in.");
   }
 
-  if (user.role !== "artisan" && user.role !== "seller") {
-    throw new Error("Unauthorized - only artisans and sellers can create products.");
+  if (user.role !== "artisan" && user.role !== "admin") {
+    throw new Error("Unauthorized - only artisans can create products.");
   }
 
   const [result] = await sql<Product[]>`
