@@ -118,13 +118,15 @@ header nav a:hover {
 }
 
 .cart-icon {
-  width: 26px;
-  height: 26px;
-  color: var(--primary);
+  width: 32px;
+  height: 32px;
+  color: var(--accent1);
+  stroke-width: 1.5px;
 }
 
 .cart-icon:hover {
-  color: var(--secondary);
+  /* color: var(--secondary); */
+  stroke-width: 2px;
 }
 
 @keyframes fadeIn {

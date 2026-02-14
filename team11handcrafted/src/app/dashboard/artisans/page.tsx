@@ -22,18 +22,20 @@ export default async function ArtisansPage() {
           </tr>
         </thead>
         <tbody>
-          {artisans.map((a) => (
-            <tr key={a.id}>
-              <td>{a.name}</td>
-              <td>{a.location}</td>
-              <td>{a.bio}</td>
-              <td>
-                <Link href={`/dashboard/artisans/${a.id}`} className="text-blue-500 hover:underline">
-                  View Profile
-                </Link>
-              </td>
-            </tr>
-          ))}
+          {artisans.map((a) => {
+            return (
+              <tr key={a.id}>
+                <td>{a.name}</td>
+                <td>{a.location}</td>
+                <td>{a.bio}</td>
+                <td>
+                  <Link href={`/dashboard/artisans/${a.id}`} className="text-blue-500 hover:underline">
+                    View Profile
+                  </Link>
+                </td>
+              </tr>
+            );
+          })}
         </tbody>
       </table>
     </main>

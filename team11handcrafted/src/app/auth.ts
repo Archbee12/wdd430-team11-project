@@ -84,7 +84,7 @@ export async function signupUser(data: z.infer<typeof signupSchema>) {
    LOGIN
 ================================ */
 
-export async function loginUser(data: z.infer<typeof loginSchema>) {
+export async function loginUser(data: z.infer<typeof loginSchema>): Promise<{error?: string}> {
   const { email, password } = loginSchema.parse(data);
 
   const [user] = await sql<{
@@ -95,13 +95,13 @@ export async function loginUser(data: z.infer<typeof loginSchema>) {
   `;
 
   if (!user) {
-    throw new Error("User not found");
+    throw new Error("Invalid email or password");
   }
 
   const match = await bcrypt.compare(password, user.password_hash);
 
   if (!match) {
-    throw new Error("Invalid password");
+    throw new Error("Invalid email or password");
   }
 
   const token = crypto.randomUUID();
