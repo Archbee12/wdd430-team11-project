@@ -84,7 +84,7 @@ export async function signupUser(data: z.infer<typeof signupSchema>) {
    LOGIN
 ================================ */
 
-export async function loginUser(data: z.infer<typeof loginSchema>): Promise<{error?: string}> {
+export async function loginUser(data: z.infer<typeof loginSchema>){
   const { email, password } = loginSchema.parse(data);
 
   const [user] = await sql<{
