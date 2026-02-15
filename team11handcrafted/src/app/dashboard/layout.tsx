@@ -15,10 +15,16 @@ export default async function DashboardLayout({ children }: { children: React.Re
 
       <div className="dashboard-main">
         <SideNav />
-        <main className="dashboard-content">
-          {children}
+      
+        <div className="dashboard-right">
+          <div className="dashboard-content">
+            <main className="dashboard-page">
+              {children}
+            </main>
+          </div>
+          
           <Footer />
-        </main>
+        </div>
       </div>
     </div>
   );

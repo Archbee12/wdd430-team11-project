@@ -2,6 +2,7 @@ import { getProductById } from '@/app/lib/actions';
 import { inter } from '@/app/ui/fonts';
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
+import AddToCartButton from '@/app/ui/cart/cart-button';
 
 type Props = { params: Promise<{ id: string }> };
 
@@ -49,7 +50,13 @@ export default async function ProductDetailsPage({ params }: Props) {
             <p className="hero-rating">⭐ {product.rating}</p>
           )}
 
-          <button className="buy-now-btn">Add To Cart</button>
+          <AddToCartButton
+            id={product.id}
+            name={product.name}
+            price={product.price}
+            image_url={product.image_url}
+          />
+
         </div>
       </section>
     </main>

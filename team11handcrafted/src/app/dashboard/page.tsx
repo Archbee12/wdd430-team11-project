@@ -20,6 +20,10 @@ export default async function Page() {
   const artisanCount = artisans.length;
   const productCount = products.length;
 
+  // 👇 LIMIT TO 2 ONLY FOR DASHBOARD
+  const dashboardProducts = products.slice(0, 2);
+  const dashboardArtisans = artisans.slice(0, 2);
+
   return (
     <div className={`${inter.className} dashboard-page p-6`}>
       {/* Dashboard Title */}
@@ -31,13 +35,13 @@ export default async function Page() {
       {/* Products Section */}
       <section className="dashboard-section mt-10">
         <h2 className="section-title">Handcrafted Products</h2>
-        <ProductCardWrapper products={products} />
+        <ProductCardWrapper products={dashboardProducts} />
       </section>
 
       {/* Artisans Section */}
       <section className="dashboard-section mt-10">
         <h2 className="section-title">Artisans</h2>
-        <ArtisanCardWrapper artisans={artisans} />
+        <ArtisanCardWrapper artisans={dashboardArtisans} />
       </section>
     </div>
   );

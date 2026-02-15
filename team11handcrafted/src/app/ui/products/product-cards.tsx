@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
+import AddToCartButton from '@/app/ui/cart/cart-button';
 
 type ProductCardProps = {
   id: string;
@@ -11,18 +12,25 @@ type ProductCardProps = {
 
 export function ProductCard({ id, imageSrc, title, subtitle, amount }: ProductCardProps) {
   return (
-    <Link href={`/dashboard/products/${id}`}>
       <div className="product-card cursor-pointer hover:shadow-lg transition">
-        <div className="product-card__image">
-          <Image src={imageSrc} alt={title} width={300} height={200} />
-        </div>
-        <div className="product-card__content">
-          <h3>{title}</h3>
-          <p className="subtitle">{subtitle}</p>
-          <p className="amount">${amount.toFixed(2)}</p>
-        </div>
+        <Link href={`/dashboard/products/${id}`}>
+          <div className="product-card__image">
+            <Image src={imageSrc} alt={title} width={300} height={200} />
+          </div>
+          <div className="product-card__content">
+            <h3>{title}</h3>
+            <p className="subtitle">{subtitle}</p>
+            <p className="amount">${amount.toFixed(2)}</p>
+            
+          </div>
+        </Link>
+        <AddToCartButton
+          id={id}
+          name={title}
+          price={amount}
+          image_url={imageSrc}
+        />
       </div>
-    </Link>
   );
 }
 

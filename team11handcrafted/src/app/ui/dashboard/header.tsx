@@ -37,7 +37,7 @@ export default function Header({ user }: HeaderProps) {
   return (
     <header className="flex justify-between items-center p-4 bg-gray-100 shadow">
       <h1 className={`${poppins.className} text-2xl font-bold`}>
-        Handcrafted Haven
+        <Link href="/dashboard">Handcrafted Haven</Link>
       </h1>
 
       <div className="flex items-center gap-4">
