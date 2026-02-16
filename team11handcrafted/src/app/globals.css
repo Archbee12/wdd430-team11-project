@@ -31,17 +31,42 @@ a {
 }
 
 /* ====== HEADER ======= */
-header {
+
+/* header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1.5rem 2rem;
+  padding: 1.2rem 2.5rem;
+  background-color: var(--primary);
+  color: white;  
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+} */
+
+.header {
+  width: 100%;
   background-color: var(--primary);
   color: white;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
 
-header h1 {
-  font-size: 1.8rem;
+.header-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.2rem 2rem;
+} 
+
+.logo {
+  font-size: 1.5rem;
+  letter-spacing: 0.5px;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
 }
 
 header nav a {
@@ -54,13 +79,25 @@ header nav a:hover {
   opacity: 0.8;
 }
 
+ .icon-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;  
+  height: 40px;
+  border-radius: 50%;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+}
+
 .relative button {
   background: none;
   border: none;
   padding: 0;
 }
 
-.profile-btn {
+.profile-button {
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -115,10 +152,10 @@ header nav a:hover {
 }
 
 .profile-link:hover {
-  background-color: var(--accent1);
+  color: var(--accent2);
 }
 
-.cart-icon {
+/* .cart-icon {
   width: 32px;
   height: 32px;
   color: var(--accent1);
@@ -126,9 +163,45 @@ header nav a:hover {
 }
 
 .cart-icon:hover {
-  /* color: var(--secondary); */
   stroke-width: 2px;
+} */
+
+/* ====== Cart Icon ======= */
+.cart-link,
+.profile-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  background: none;
+  border: none;
+  cursor: pointer;
 }
+
+/* Cart Icon */
+.cart-icon {
+  width: 26px;
+  height: 26px;
+  color: white;
+  transition: transform 0.2s ease;
+}
+
+.cart-icon:hover {
+  transform: scale(1.1);
+}
+
+/* Profile Icon */
+.profile-icon {
+  width: 32px;
+  height: 32px;
+  color: white;
+  transition: transform 0.2s ease;
+}
+
+.profile-icon:hover {
+  transform: scale(1.1);
+}
+
 
 /* ================= CART PAGE ================= */
 

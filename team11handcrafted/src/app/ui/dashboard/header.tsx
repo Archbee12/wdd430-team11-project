@@ -3,13 +3,16 @@
 import { poppins } from "@/app/ui/fonts";
 import Link from "next/link";
 import { useState, useEffect, useRef } from "react";
-import { ShoppingCartIcon, UserCircleIcon } from "@heroicons/react/24/outline";
+import {
+  UserCircleIcon,
+  ShoppingCartIcon,
+} from "@heroicons/react/24/outline";
 import { getCart } from "@/app/lib/cart";
 
 type User = {
   id: string;
   name: string;
-  role: string;
+  role: string; // 'artisan' | 'buyer' | 'admin'
 };
 
 type HeaderProps = {
@@ -21,8 +24,10 @@ export default function Header({ user }: HeaderProps) {
   const [count, setCount] = useState(0);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  // Load cart count
+  /* ================= CART COUNT (BUYERS ONLY) ================= */
   useEffect(() => {
+    if (user.role !== "buyer") return;
+
     function updateCart() {
       const cart = getCart();
       const total = cart.reduce((sum, item) => sum + item.quantity, 0);
@@ -33,9 +38,9 @@ export default function Header({ user }: HeaderProps) {
     window.addEventListener("storage", updateCart);
 
     return () => window.removeEventListener("storage", updateCart);
-  }, []);
+  }, [user.role]);
 
-  // Close dropdown on outside click
+  /* ================= CLOSE DROPDOWN ON OUTSIDE CLICK ================= */
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (
@@ -47,32 +52,68 @@ export default function Header({ user }: HeaderProps) {
     }
 
     document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
+    return () =>
+      document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   return (
-    <header className="flex justify-between items-center p-4 bg-gray-100 shadow">
-      <h1 className={`${poppins.className} text-2xl font-bold`}>
-        <Link href="/dashboard">Handcrafted Haven</Link>
-      </h1>
+    <header className="header">
+      <div className="header-container">
 
-      <div className="flex items-center gap-4">
-        {user.role === "artisan" ? (
-          <div className="relative" ref={dropdownRef}>
-            <button onClick={() => setDropdownOpen(!dropdownOpen)}>
-              <UserCircleIcon className="h-7 w-7" />
-            </button>
-          </div>
-        ) : (
-          <Link href="/dashboard/cart" className="relative">
-            <ShoppingCartIcon className="h-7 w-7" />
-            {count > 0 && (
-              <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs px-2 py-0.5 rounded-full">
-                {count}
-              </span>
-            )}
-          </Link>
-        )}
+        <h1 className={`logo ${poppins.className}`}>
+          <Link href="/dashboard">Handcrafted Haven</Link>
+        </h1>
+
+        <div className="header-actions">
+
+          {/* ================= ARTISAN VIEW ================= */}
+          {user.role === "artisan" && (
+            <div className="profile-wrapper" ref={dropdownRef}>
+              <button
+                className="profile-button"
+                onClick={() => setDropdownOpen(!dropdownOpen)}
+              >
+                <UserCircleIcon className="profile-icon" />
+              </button>
+
+              {dropdownOpen && (
+                <div className="profile-panel">
+                  <div className="profile-header">
+                    <UserCircleIcon className="profile-avatar" />
+                    <span>{user.name}</span>
+                  </div>
+
+                  <Link
+                    href={`/dashboard/artisans/${user.id}`}
+                    className="profile-link"
+                    onClick={() => setDropdownOpen(false)}
+                  >
+                    View Profile
+                  </Link>
+
+                  <Link
+                    href="/dashboard/artisans/products"
+                    className="profile-link"
+                    onClick={() => setDropdownOpen(false)}
+                  >
+                    View Products
+                  </Link>
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* ================= BUYER VIEW ================= */}
+          {user.role === "buyer" && (
+            <Link href="/dashboard/cart" className="cart-link">
+              <ShoppingCartIcon className="cart-icon" />
+              {count > 0 && (
+                <span className="cart-badge">{count}</span>
+              )}
+            </Link>
+          )}
+
+        </div>
       </div>
     </header>
   );
