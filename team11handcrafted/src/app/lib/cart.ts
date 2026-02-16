@@ -35,3 +35,7 @@ export function addToCart(item: Omit<CartItem, "quantity">) {
 export function clearCart() {
   localStorage.removeItem(CART_KEY);
 }
+
+export function getCartCount(): number {
+  return getCart().reduce((sum, item) => sum + item.quantity, 0);
+}
