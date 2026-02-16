@@ -3,11 +3,8 @@
 import { poppins } from "@/app/ui/fonts";
 import Link from "next/link";
 import { useState, useEffect, useRef } from "react";
-import {
-  UserCircleIcon,
-  ShoppingCartIcon,
-} from "@heroicons/react/24/outline";
-import { getCart } from "@/app/lib/cart";
+import CartIcon from "@/app/ui/cart/cart-icon";
+import { UserCircleIcon} from "@heroicons/react/24/outline";
 
 type User = {
   id: string;
@@ -21,24 +18,8 @@ type HeaderProps = {
 
 export default function Header({ user }: HeaderProps) {
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const [count, setCount] = useState(0);
+
   const dropdownRef = useRef<HTMLDivElement>(null);
-
-  /* ================= CART COUNT (BUYERS ONLY) ================= */
-  useEffect(() => {
-    if (user.role !== "buyer") return;
-
-    function updateCart() {
-      const cart = getCart();
-      const total = cart.reduce((sum, item) => sum + item.quantity, 0);
-      setCount(total);
-    }
-
-    updateCart();
-    window.addEventListener("storage", updateCart);
-
-    return () => window.removeEventListener("storage", updateCart);
-  }, [user.role]);
 
   /* ================= CLOSE DROPDOWN ON OUTSIDE CLICK ================= */
   useEffect(() => {
@@ -66,7 +47,7 @@ export default function Header({ user }: HeaderProps) {
 
         <div className="header-actions">
 
-          {/* ================= ARTISAN VIEW ================= */}
+          {/* ========== ARTISAN VIEW ============== */}
           {user.role === "artisan" && (
             <div className="profile-wrapper" ref={dropdownRef}>
               <button
@@ -103,15 +84,10 @@ export default function Header({ user }: HeaderProps) {
             </div>
           )}
 
-          {/* ================= BUYER VIEW ================= */}
+          {/* =========== BUYER VIEW ============= */}
           {user.role === "buyer" && (
-            <Link href="/dashboard/cart" className="cart-link">
-              <ShoppingCartIcon className="cart-icon" />
-              {count > 0 && (
-                <span className="cart-badge">{count}</span>
-              )}
-            </Link>
-          )}
+  <CartIcon />
+)}
 
         </div>
       </div>

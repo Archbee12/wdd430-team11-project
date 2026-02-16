@@ -155,17 +155,6 @@ header nav a:hover {
   color: var(--accent2);
 }
 
-/* .cart-icon {
-  width: 32px;
-  height: 32px;
-  color: var(--accent1);
-  stroke-width: 1.5px;
-}
-
-.cart-icon:hover {
-  stroke-width: 2px;
-} */
-
 /* ====== Cart Icon ======= */
 .cart-link,
 .profile-button {
@@ -189,6 +178,19 @@ header nav a:hover {
 .cart-icon:hover {
   transform: scale(1.1);
 }
+
+.cart-badge {
+  position: absolute;
+  top: -6px;
+  right: -8px;
+  background-color: #ef4444;
+  color: white;
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 999px;
+}
+
 
 /* Profile Icon */
 .profile-icon {
