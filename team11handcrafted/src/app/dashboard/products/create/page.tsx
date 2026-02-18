@@ -12,17 +12,27 @@ export default async function CreateProductPage() {
   }
 
   // 🚨 Logged in but NOT artisan or seller
-  if (user.role !== "artisan" && user.role !== "seller") {
+  if (user.role !== "artisan" && user.role !== "admin") {
     // throw new Error("Unauthorized"); 
-    redirect("/dashboard");
+    // redirect("/dashboard");
+    return (
+      <main className={`${inter.className} p-4`}>q
+        <h1 className="text-2xl font-bold mb-6">Create a New Product</h1>
+        <ProductForm artisan_id={user.id} />
+      </main>
+    );
   }
 
-  return (
-    <main className={`${inter.className} p-4`}>
-      <h1 className="text-2xl font-bold mb-6">Create a New Product</h1>
-      <ProductForm artisan_id={user.id} />
-    </main>
-  );
-}
+  // ✅ Admin flow
+  // if (user.role === "admin") {
+  //   const artisans = await getAllArtisans();
 
+  //   return (
+  //     <main className={`${inter.className} p-4`}>
+  //       <h1 className="text-2xl font-bold mb-6">Create Product (Admin)</h1>
+  //       <ProductForm artisans={artisans} />
+  //     </main>
+  //   );
+  // }
+}
 

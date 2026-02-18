@@ -2,6 +2,7 @@ import { getArtisanById } from "@/app/lib/actions";
 import { inter } from "@/app/ui/fonts";
 import { notFound } from "next/navigation";
 import Image from "next/image";
+import Link from "next/link";
 
 type Props = { params: Promise<{ id: string }> };
 
@@ -32,7 +33,9 @@ export default async function ArtisanDetailPage({ params }: Props) {
           {artisan.location && <p className="hero-location">{artisan.location}</p>}
 
           <div className="hero-actions">
-            <button className="update-profile-btn">Update Profile</button>
+            <Link href={`/dashboard/artisans/${id}/edit`} className="update-profile-btn">
+              Edit Profile
+            </Link>
           </div>
         </div>
       </section>
