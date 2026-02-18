@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { updateArtisan } from "@/app/lib/actions";
+import { deleteArtisan, updateArtisan } from "@/app/lib/actions";
 import Image from "next/image";
 import FormCard from "@/app/ui/form/form-card";
 import styles from "@/app/ui/form/form-card.module.css";
@@ -57,10 +57,13 @@ export default function ArtisanForm({ artisan }: ArtisanFormProps) {
 
     try {
       // Call a new server action: deleteArtisan
-      const res = await fetch(`/api/artisans/${artisan.id}`, { method: "DELETE" });
-      if (!res.ok) throw new Error("Failed to delete artisan");
-      alert("Artisan deleted successfully!");
+      // const res = await fetch(`/dashboard/artisans/${artisan.id}`, { method: "DELETE" });
+
+      // if (!res.ok) throw new Error("Failed to delete artisan");
+      // alert("Artisan deleted successfully!");
       // Optionally, redirect to dashboard or artisans list
+      await deleteArtisan(artisan.id);
+      alert("Artisan deleted successfully!");
       window.location.href = "/dashboard/artisans";
     } catch (err) {
       setMessage(err instanceof Error ? err.message : "Failed to delete artisan");

@@ -17,6 +17,10 @@ type Product = {
 type ProductFormProps = {
   artisan_id: string;
   product?: Product;
+  artisans?: {
+    id: string;
+    name: string;
+  }[];
 };
 
 export default function ProductForm({ artisan_id, product }: ProductFormProps) {

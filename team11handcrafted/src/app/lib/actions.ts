@@ -75,9 +75,19 @@ export async function createProduct(product: {
     throw new Error("Unauthorized - only artisans can create products.");
   }
 
+  let artisanId: string;
+
+  if (user.role === "artisan") {
+    // Artisan can only create for themselves
+    artisanId = user.id;
+  } else {
+    // Admin must specify artisan
+    artisanId = product.artisan_id;
+  }
+
   const [result] = await sql<Product[]>`
     INSERT INTO products (name, description, price, artisan_id, image_url)
-    VALUES (${product.name}, ${product.description}, ${product.price}, ${user.id}, ${product.image_url})
+    VALUES (${product.name}, ${product.description}, ${product.price}, ${artisanId}, ${product.image_url})
     RETURNING *;
   `;
   return result;
@@ -233,4 +243,31 @@ export async function getProductsByArtisanId(artisanId: string) {
         : 0,
   }));
 }
+
+export async function deleteArtisan(id: string) {
+  const user = await getCurrentUser();
+  if (!user || user.role !== "admin") {
+    throw new Error("Only admin can delete artisans");
+  }
+
+  // 1️⃣ Delete all products by artisan
+  await sql`
+    DELETE FROM products
+    WHERE artisan_id = ${id};
+  `;
+
+  // 2️⃣ Delete artisan profile
+  await sql`
+    DELETE FROM artisans
+    WHERE id = ${id};
+  `;
+
+  // 3️⃣ Delete user record
+  await sql`
+    DELETE FROM users
+    WHERE id = ${id};
+  `;
+}
+
+
 
