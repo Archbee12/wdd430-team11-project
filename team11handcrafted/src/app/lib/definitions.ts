@@ -14,7 +14,9 @@ export type Product = {
   price: number;  
   rating: number;
   image_url: string;
-  artisan_name?: string;  // Add this line
+  artisan_name?: string;
+  average_rating?: number;
+  review_count?: number;
 };
 
 export type User = {
@@ -25,3 +27,17 @@ export type User = {
   role: "artisan" | "buyer" | "admin";
 };
 
+export type Review = {
+  id: string;
+  product_id: string;
+  user_id: string;
+  rating: number;
+  comment: string | null;
+  created_at: string;
+  updated_at: string;
+  user_name?: string;
+};
+
+export type ReviewWithUser = Review & {
+  user_name: string;
+};
