@@ -30,6 +30,8 @@ export function addToCart(item: Omit<CartItem, "quantity">) {
   }
 
   saveCart(cart);
+
+  window.dispatchEvent(new Event("cartUpdated")); // notify other tabs
 }
 
 export function clearCart() {
