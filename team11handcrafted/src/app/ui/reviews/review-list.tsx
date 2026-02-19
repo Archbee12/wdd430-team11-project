@@ -71,7 +71,6 @@ export default function ReviewList({
         throw new Error(data.error || "Failed to delete review");
       }
 
-      // Refresh reviews
       fetchReviews();
     } catch (err) {
       alert(err instanceof Error ? err.message : "Failed to delete review");
@@ -87,13 +86,8 @@ export default function ReviewList({
     });
   };
 
-  if (isLoading) {
-    return <div className={styles.loading}>Loading reviews...</div>;
-  }
-
-  if (error) {
-    return <div className={styles.error}>{error}</div>;
-  }
+  if (isLoading) return <div className={styles.loading}>Loading reviews...</div>;
+  if (error) return <div className={styles.error}>{error}</div>;
 
   return (
     <div className={styles.reviewList}>
@@ -102,9 +96,9 @@ export default function ReviewList({
         <div className={styles.reviewStats}>
           <div className={styles.averageRating}>
             <span className={styles.ratingNumber}>
-              {stats.average_rating.toFixed(1)}
+              {Number(stats.average_rating).toFixed(1)}
             </span>
-            <StarRating rating={stats.average_rating} readonly size="medium" />
+            <StarRating rating={Number(stats.average_rating)} readonly size="medium" />
             <span className={styles.reviewCount}>
               {stats.review_count} {stats.review_count === 1 ? "review" : "reviews"}
             </span>

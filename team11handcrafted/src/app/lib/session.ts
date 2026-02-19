@@ -23,3 +23,25 @@ export async function getCurrentUser() {
 
   return user ?? null;
 }
+
+export async function getSession() {
+  const cookieStore = await cookies();
+  const sessionToken = cookieStore.get("session")?.value;
+  if (!sessionToken) return null;
+
+  const [session] = await sql<{ user_id: string }[]>`
+    SELECT user_id FROM sessions WHERE token = ${sessionToken};
+  `;
+  if (!session) return null;
+
+  const [user] = await sql<{
+    id: string;
+    role: string;
+  }[]>`
+    SELECT id, role FROM users WHERE id = ${session.user_id};
+  `;
+
+  if (!user) return null;
+
+  return { userId: user.id, role: user.role };
+}

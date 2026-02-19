@@ -1,14 +1,17 @@
 import { getProductById } from '@/app/lib/actions';
+import { getCurrentUser } from '@/app/lib/session';
 import { inter } from '@/app/ui/fonts';
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
 import AddToCartButton from '@/app/ui/cart/cart-button';
+import ReviewSection from '@/app/ui/reviews/review-section';
 
 type Props = { params: Promise<{ id: string }> };
 
 export default async function ProductDetailsPage({ params }: Props) {
   const { id } = await params;
   const product = await getProductById(id);
+  const user = await getCurrentUser();
 
   if (!product) return notFound();
 
@@ -16,7 +19,7 @@ export default async function ProductDetailsPage({ params }: Props) {
     <main className={`${inter.className} product-detail-page`}>
       <section className="hero-detail">
         {/* Image */}
-        
+
         <div className="hero-title">
           <h1 className="hero-name">{product.name}</h1>
         </div>
@@ -59,6 +62,14 @@ export default async function ProductDetailsPage({ params }: Props) {
 
         </div>
       </section>
+
+      {/* Reviews Section */}
+      <ReviewSection
+        productId={product.id}
+        currentUserId={user?.id}
+        userRole={user?.role}
+      />
     </main>
   );
 }
+
