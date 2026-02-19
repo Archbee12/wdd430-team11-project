@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { createProduct, updateProduct, deleteProduct } from "@/app/lib/actions";
-import styles from "./product-form.module.css";
+import styles from "@/app/ui/form/form-card.module.css";
 import Image from "next/image";
 
 type Product = {
