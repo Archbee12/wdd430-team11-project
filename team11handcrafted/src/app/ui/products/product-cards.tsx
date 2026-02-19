@@ -6,11 +6,11 @@ type ProductCardProps = {
   id: string;
   imageSrc: string;
   title: string;
-  subtitle: string;
+  // subtitle: string;
   amount: number;
 };
 
-export function ProductCard({ id, imageSrc, title, subtitle, amount }: ProductCardProps) {
+export function ProductCard({ id, imageSrc, title, amount }: ProductCardProps) {
   return (
     <div className="product-card cursor-pointer hover:shadow-lg transition">
       <Link href={`/dashboard/products/${id}`}>
@@ -19,7 +19,7 @@ export function ProductCard({ id, imageSrc, title, subtitle, amount }: ProductCa
         </div>
         <div className="product-card__content">
           <h3>{title}</h3>
-          <p className="subtitle">{subtitle}</p>
+          {/* <p className="subtitle">{subtitle}</p> */}
           <p className="amount">${amount.toFixed(2)}</p>
 
         </div>
@@ -45,7 +45,7 @@ type ProductCardWrapperProps = {
   products: {
     id: string;
     name: string;
-    description: string;
+    // description: string;
     price: number;
     image_url: string;
   }[];
@@ -60,7 +60,7 @@ export default function ProductCardWrapper({ products }: ProductCardWrapperProps
           id={p.id}
           imageSrc={p.image_url}
           title={p.name}
-          subtitle={p.description}
+          // subtitle={p.description}
           amount={p.price}
         />
       ))}
