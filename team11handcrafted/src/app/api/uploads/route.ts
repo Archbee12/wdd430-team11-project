@@ -1,35 +1,42 @@
-import { NextRequest, NextResponse } from "next/server";
-import { writeFile } from "fs/promises";
-import path from "path";
+import { NextResponse } from "next/server";
+import cloudinary from "@/app/lib/cloudinary";
+import { UploadApiResponse } from "cloudinary";
 
-export async function POST(req: NextRequest) {
+export async function POST(req: Request) {
   try {
     const formData = await req.formData();
     const file = formData.get("file") as File;
 
     if (!file) {
-      return NextResponse.json({ error: "No file uploaded" }, { status: 400 });
+      return NextResponse.json(
+        { error: "No file uploaded" },
+        { status: 400 }
+      );
     }
 
-    // Convert file to buffer
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
 
-    // Create unique filename
-    const fileName = `${Date.now()}-${file.name}`;
+    const result = await new Promise<UploadApiResponse>((resolve, reject) => {
+      const uploadStream = cloudinary.uploader.upload_stream(
+        { folder: "team11handcrafted" },
+        (error, result) => {
+          if (error) reject(error);
+          else resolve(result as UploadApiResponse);
+        }
+      );
 
-    // Define upload path
-    const uploadPath = path.join(process.cwd(), "public/uploads", fileName);
+      uploadStream.end(buffer);
+    });
 
-    // Save file
-    await writeFile(uploadPath, buffer);
-
-    // Return public URL
     return NextResponse.json({
-      imageUrl: `/uploads/${fileName}`,
+      imageUrl: result.secure_url,
     });
   } catch (error) {
     console.error("Upload error:", error);
-    return NextResponse.json({ error: "Upload failed" }, { status: 500 });
+    return NextResponse.json(
+      { error: "Upload failed" },
+      { status: 500 }
+    );
   }
 }
