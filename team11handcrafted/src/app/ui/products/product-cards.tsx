@@ -12,32 +12,28 @@ type ProductCardProps = {
 
 export function ProductCard({ id, imageSrc, title, subtitle, amount }: ProductCardProps) {
   return (
-    <div className="product-card">
-      <Link href={`/dashboard/products/${id}`} className="product-link">
+    <div className="product-card cursor-pointer hover:shadow-lg transition">
+      <Link href={`/dashboard/products/${id}`}>
         <div className="product-card__image">
-          <Image 
-            src={imageSrc} 
-            alt={title} 
-            width={300} 
-            height={220}
-            className="product-img"
-          />
+          <Image src={imageSrc} alt={title} width={300} height={200} />
         </div>
-
         <div className="product-card__content">
-          <h3 className="product-title">{title}</h3>
-          <p className="product-subtitle">{subtitle}</p>
-          <p className="product-price">${amount.toFixed(2)}</p>
+          <h3>{title}</h3>
+          <p className="subtitle">{subtitle}</p>
+          <p className="amount">${amount.toFixed(2)}</p>
+
         </div>
       </Link>
-
-      <div className="product-card__action">
+      <div className="product-card__actions">
         <AddToCartButton
           id={id}
           name={title}
           price={amount}
           image_url={imageSrc}
         />
+        <Link href={`/dashboard/products/${id}#reviews`} className="review-btn">
+          ★ Reviews
+        </Link>
       </div>
     </div>
   );
