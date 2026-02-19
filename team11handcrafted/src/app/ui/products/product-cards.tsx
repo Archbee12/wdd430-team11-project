@@ -31,9 +31,7 @@ export function ProductCard({ id, imageSrc, title, amount }: ProductCardProps) {
           price={amount}
           image_url={imageSrc}
         />
-        <Link href={`/dashboard/products/${id}#reviews`} className="review-btn">
-          ★ Reviews
-        </Link>
+        
       </div>
     </div>
   );

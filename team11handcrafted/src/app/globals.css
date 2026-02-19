@@ -840,7 +840,6 @@ h2 {
 
 .buy-now-btn {
   display: inline-block;
-  width: 100%;
   padding: 0.75rem 1rem;
   background: var(--primary);
   color: #fff;
@@ -854,7 +853,7 @@ h2 {
 }
 
 .buy-now-btn:hover {
-  background: var(--primary-dark);
+  background: var(--accent2);
   transform: translateY(-2px);
 }
 

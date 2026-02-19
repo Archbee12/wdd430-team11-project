@@ -5,6 +5,7 @@ import { notFound } from 'next/navigation';
 import Image from 'next/image';
 import AddToCartButton from '@/app/ui/cart/cart-button';
 import ReviewSection from '@/app/ui/reviews/review-section';
+import Link from 'next/dist/client/link';
 
 type Props = { params: Promise<{ id: string }> };
 
@@ -59,6 +60,10 @@ export default async function ProductDetailsPage({ params }: Props) {
             price={product.price}
             image_url={product.image_url}
           />
+
+          <Link href={`/dashboard/products/${id}#reviews`} className="review-btn">
+          ★ Reviews
+          </Link>
 
         </div>
       </section>
