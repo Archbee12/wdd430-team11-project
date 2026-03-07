@@ -19,7 +19,7 @@ export default async function CreateProductPage() {
   // ✅ Artisan or Admin can create
   return (
     <main className={`${inter.className} p-4`}>
-      <h1 className="text-2xl font-bold mb-6">Create a New Product</h1>
+      {/* <h1 className="text-2xl font-bold mb-6">Create a New Product</h1> */}
       <ProductForm artisan_id={user.id} />
     </main>
   );

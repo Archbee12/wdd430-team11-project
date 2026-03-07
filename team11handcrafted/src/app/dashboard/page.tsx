@@ -21,8 +21,8 @@ export default async function Page() {
   const productCount = products.length;
 
   // 👇 LIMIT TO 2 ONLY FOR DASHBOARD
-  const dashboardProducts = products.slice(0, 2);
-  const dashboardArtisans = artisans.slice(0, 2);
+  const dashboardProducts = products.slice(0, 3);
+  const dashboardArtisans = artisans.slice(0, 3);
 
   return (
     <div className={`${inter.className} dashboard-page p-6`}>

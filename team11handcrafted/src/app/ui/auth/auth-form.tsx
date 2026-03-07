@@ -5,6 +5,7 @@ import { z } from "zod";
 import styles from "./auth-form.module.css";
 import "@/app/globals.css";
 import { poppins } from "@/app/ui/fonts";
+import { useRouter } from "next/navigation";
 
 /* ===============================
    ZOD SCHEMAS
@@ -25,15 +26,19 @@ export const loginSchema = z.object({
 /* ===============================
    TYPES
 ================================ */
+type AuthResult = {
+  success: boolean;
+  role?: string;
+};
 
 type AuthFormProps =
   | {
       type: "signup";
-      action: (data: z.infer<typeof signupSchema>) => Promise<void>;
+      action: (data: z.infer<typeof signupSchema>) => Promise<AuthResult>;
     }
   | {
       type: "signin";
-      action: (data: z.infer<typeof loginSchema>) => Promise<void>;
+      action: (data: z.infer<typeof loginSchema>) => Promise<AuthResult>;
     };
 
 /* ===============================
@@ -42,10 +47,14 @@ type AuthFormProps =
 
 export default function AuthForm({ type, action }: AuthFormProps) {
   const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+  const router = useRouter();
+
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setError(null);
+    setLoading(true);
 
     const formData = new FormData(e.currentTarget);
 
@@ -65,7 +74,15 @@ export default function AuthForm({ type, action }: AuthFormProps) {
           password: formData.get("password"),
         });
 
-        await action(parsed);
+        setLoading(true);
+
+        const result = await action(parsed);
+
+        setLoading(false);
+
+        if (result?.success) {
+          router.push("/dashboard");
+        } 
       }
 
     } catch (err) {
@@ -76,6 +93,8 @@ export default function AuthForm({ type, action }: AuthFormProps) {
       } else {
         setError("Something went wrong");
       }
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -136,8 +155,12 @@ export default function AuthForm({ type, action }: AuthFormProps) {
           />
         </div>
 
-        <button type="submit" className={styles.button}>
-          {type === "signup" ? "Create Account" : "Sign In"}
+        <button type="submit" className={styles.button} disabled={loading}>
+          {loading
+            ? "Please wait..."
+            : type === "signup"
+            ? "Create Account"
+            : "Sign In"}
         </button>
 
         <div className={styles.switch}>
