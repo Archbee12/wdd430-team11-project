@@ -54,7 +54,7 @@
 }
 
 .input,
-.select {
+.select, .passwordInput {
   padding: 12px 14px;
   border-radius: 10px;
   border: 1px solid #ddd;
@@ -73,7 +73,7 @@
   width: 100%;
   padding: 14px;
   background: var(--primary);
-  color: white;
+  color: rgb(2, 2, 2);
   font-weight: 600;
   border: none;
   border-radius: 12px;
@@ -101,4 +101,42 @@
 
 .switch a:hover {
   text-decoration: underline;
+}
+
+/* == PASSWORD TOGGLE ==  */
+.passwordWrapper {
+  position: relative;
+  width: 100%;
+}
+
+.passwordInput {
+  width: 100%;
+  padding-right: 44px; /* space for the eye icon */
+}
+
+.passwordInput:focus {
+  outline: none;
+  border-color: #6366f1;
+  box-shadow: 0 0 0 2px rgba(99,102,241,0.15);
+}
+
+.eyeButton {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+.eyeIcon {
+  width: 20px;
+  height: 20px;
+  color: #6b7280;
+}
+
+.eyeButton:hover .eyeIcon {
+  color: #111827;
 }

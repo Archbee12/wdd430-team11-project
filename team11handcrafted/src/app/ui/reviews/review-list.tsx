@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import StarRating from "./star-rating";
 import styles from "./review-list.module.css";
 
@@ -32,29 +32,25 @@ export default function ReviewList({
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
 
-  useEffect(() => {
-    fetchReviews();
-  }, [productId, refreshTrigger]);
+  const fetchReviews = useCallback(async () => {
+  try {
+    setIsLoading(true);
+    const response = await fetch(`/api/products/${productId}/reviews`);
+    if (!response.ok) throw new Error("Failed to fetch reviews");
+    const data = await response.json();
+    setReviews(data.reviews);
+    setStats(data.stats);
+  } catch (err) {
+    setError("Failed to load reviews");
+    console.error(err);
+  } finally {
+    setIsLoading(false);
+  }
+}, [productId]); // <-- include productId as dependency
 
-  const fetchReviews = async () => {
-    try {
-      setIsLoading(true);
-      const response = await fetch(`/api/products/${productId}/reviews`);
-      
-      if (!response.ok) {
-        throw new Error("Failed to fetch reviews");
-      }
-
-      const data = await response.json();
-      setReviews(data.reviews);
-      setStats(data.stats);
-    } catch (err) {
-      setError("Failed to load reviews");
-      console.error(err);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+useEffect(() => {
+  fetchReviews();
+}, [fetchReviews, refreshTrigger]);
 
   const handleDelete = async (reviewId: string) => {
     if (!confirm("Are you sure you want to delete this review?")) {

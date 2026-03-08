@@ -614,7 +614,6 @@ h2 {
   /* padding: 10px; */
 }
 
-
 .artisans {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
@@ -622,7 +621,7 @@ h2 {
   padding: 1rem 0;
 }
 
-.product-card, .artisan-card {
+.product-card {
   /* background: var(--nav-color); */
   border-radius: 6px;
   border: 1px solid #eeeeee;
@@ -703,17 +702,23 @@ h2 {
   color: var(--primary);
 }
 
+.more-products-title {
+  font-size: 1.25rem;       
+  font-weight: bold;        
+  margin-bottom: 1rem;     
+  color: var(--primary);         
+}
+
 .review-btn {
-  flex: 1;
-  display: flex;
+  display: inline-flex;          /* shrink to content instead of stretching */
   align-items: center;
   justify-content: center;
-  padding: 0.6rem 0.75rem;
+  padding: 0.5rem 1rem;         /* balanced padding */
   font-weight: 600;
   font-size: 0.9rem;
-  border-radius: 0.5rem;
+  border-radius: 0.5rem;        /* rounded corners */
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.3s ease;    /* smooth hover */
   border: 2px solid var(--primary);
   background-color: transparent;
   color: var(--primary);
@@ -723,6 +728,73 @@ h2 {
 .review-btn:hover {
   background-color: var(--primary);
   color: white;
+  transform: translateY(-2px);   /* subtle lift effect */
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.review-btn:hover {
+  background-color: var(--primary);
+  color: white;
+}
+
+/* === Artisan Card === */
+/* 2-column grid layout */
+.artisan-cards-wrapper {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  justify-items: center; /* center cards horizontally */
+  margin-top: 1rem;
+}
+
+/* Card container (no background or border) */
+.artisan-card-link {
+  text-decoration: none;
+  color: inherit;
+}
+
+.artisan-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+/* Rounded image */
+.artisan-card__image {
+  width: 150px;
+  height: 150px;
+  overflow: hidden;
+  border-radius: 50%; /* rounded */
+  margin-bottom: 0.5rem;
+}
+
+.artisan-card__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Title */
+.artisan-card__title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 0.25rem 0;
+}
+
+/* Bio */
+.artisan-card__bio {
+  font-size: 0.9rem;
+  color: #555;
+  line-height: 1.3;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .artisan-cards-wrapper {
+    grid-template-columns: 1fr; /* stack on mobile */
+  }
 }
 
 /* ====== HANDCRAFTED HAVEN ARTISANS TABLE ====== */
@@ -809,52 +881,119 @@ h2 {
   background-color: var(--primary);
 }
 
-/* ========= Details Page ========= */
+/* ==== Product & Artisan Details Page ==== */
 
-.hero-detail {
-  display: flex;
-  flex-direction: column;
+.product-layout, .artisan-layout {
+  display: grid;
+  grid-template-columns: 1fr;
   gap: 2rem;
-  padding: 2rem;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 2rem .5rem;
 }
 
-.hero-image {
-  
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+.product-image-col, .artisan-image-col {
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-.hero-image img {
-  width: 320px;
-  height: 296px;
-  object-fit: contain;
-  border-radius: 0.75rem;
-    
+.product-image-col, .artisan-image-col {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-.hero-info {
+.product-image, .artisan-image {
+  width: 100%;
+  max-width: 520px;
+  height: auto;
+  border-radius: 12px;
+  object-fit: cover;
+}
+
+.product-info-col, .artisan-info-col {
   display: flex;
-  align-items: center;
   flex-direction: column;
   gap: 1rem;
 }
 
-.buy-now-btn {
-  display: inline-block;
-  padding: 0.75rem 1rem;
-  background: var(--primary);
-  color: #fff;
-  font-size: 1rem;
+.product-name h1, .artisan-name h1 {
+  font-size: 5rem;
+  font-weight: 900;
+}
+
+.product-price {
+  font-size: 1.5rem;
   font-weight: 600;
-  text-align: center;
-  border: none;
+  color: #111827;
+}
+
+.product-artisan {
+  color: #6b7280;
+  font-size: 0.95rem;
+}
+
+.product-description, .artisan-bio {
+  margin-top: 1rem;
+  line-height: 1.6;
+  color: #374151;
+}
+
+.product-rating, .artisan-location {
+  font-size: 0.95rem;
+}
+
+.product-buttons {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+/* Primary Button (Reviews) */
+.review-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.6rem 1.2rem;
+  font-weight: 600;
+  font-size: 0.95rem;
   border-radius: 0.5rem;
+  background-color: var(--secondary); /* primary blue */
+  color: white;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.review-btn:hover {
+  background-color: var(--primary);  /* darker blue on hover */
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px rgba(7, 92, 52, 0.1);
+}
+
+/* Secondary Button (Add to Cart) */
+.buy-now-btn {
+  padding: 0.55rem 1.1rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  font-size: 0.9rem;
+  border: 2px solid var(--primary);   /* outline matches primary color */
+  color: var(--primary);
+  background-color: transparent;
   cursor: pointer;
-  transition: background 0.3s ease, transform 0.2s ease;
+  transition: all 0.3s ease;
+  width: fit-content;
+}
+
+.buy-now-btn:hover {
+  background-color: var(--primary);  /* fill on hover */
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.buy-now-btn.added {
+  background-color: #16a34a; /* green */
 }
 
 .buy-now-btn:hover {
@@ -870,6 +1009,36 @@ h2 {
 .buy-now-btn:disabled {
   background: #ccc;
   cursor: not-allowed;
+}
+
+/* == Artisan Button === */
+.artisan-buttons {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.edit-profile-btn {
+  padding: 0.6rem 1rem;
+  font-weight: 600;
+  font-size: 0.95rem;
+  border-radius: 8px;
+  background-color: var(--primary);
+  color: #fff;
+  text-decoration: none;
+  transition: background-color 0.2s ease;
+}
+
+.edit-profile-btn:hover {
+  background-color: #374151;
+}
+
+/* === Product & Artisan Details Bigger Viewport */
+@media (min-width: 900px) {
+  .product-layout, .artisan-layout {
+    grid-template-columns: 1.1fr 0.9fr;
+    align-items: center;
+  }
 }
 
 /* Desktop Layout */

@@ -6,10 +6,9 @@ import styles from "./auth-form.module.css";
 import "@/app/globals.css";
 import { poppins } from "@/app/ui/fonts";
 import { useRouter } from "next/navigation";
+import PasswordInput from "./password-input";
 
-/* ===============================
-   ZOD SCHEMAS
-================================ */
+/* =========== ZOD SCHEMAS ========== */
 
 export const signupSchema = z.object({
   name: z.string().min(1, "Name is required"),
@@ -50,7 +49,6 @@ export default function AuthForm({ type, action }: AuthFormProps) {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
-
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -156,11 +154,10 @@ export default function AuthForm({ type, action }: AuthFormProps) {
 
         <div className={styles.field}>
           <label className={styles.label}>Password</label>
-          <input
+
+          <PasswordInput
             name="password"
-            type="password"
             placeholder="Enter your password"
-            className={styles.input}
           />
         </div>
 

@@ -11,14 +11,14 @@ type ArtisanCardProps = {
 
 export function ArtisanCard({ id, imageSrc, title, bio }: ArtisanCardProps) {
   return (
-    <Link href={`/dashboard/artisans/${id}`}>
-      <div className="artisan-card cursor-pointer hover:shadow-lg transition">
+    <Link href={`/dashboard/artisans/${id}`} className="artisan-card-link">
+      <div className="artisan-card">
         <div className="artisan-card__image">
-          <Image src={imageSrc} alt={title} width={300} height={200} />
+          <Image src={imageSrc} alt={title} width={300} height={200} className="artisan-card__img" />
         </div>
         <div className="artisan-card__content">
-          <h3>{title}</h3>
-          <p className="subtitle">{bio.slice(0, 50)}...</p>
+          <h3 className="artisan-card__title">{title}</h3>
+          <p className="artisan-card__bio">{bio.slice(0, 50)}...</p>
         </div>
       </div>
     </Link>
