@@ -29,6 +29,7 @@ export const loginSchema = z.object({
 type AuthResult = {
   success: boolean;
   role?: string;
+  userId?: string; 
 };
 
 type AuthFormProps =
@@ -67,7 +68,15 @@ export default function AuthForm({ type, action }: AuthFormProps) {
           role: formData.get("role"),
         });
 
-        await action(parsed);
+        const result = await action(parsed);
+
+        if (result?.success) {
+          if (result.role === "artisan") {
+            router.push(`/dashboard/artisans/${result.userId}/edit`);
+          } else {
+            router.push("/dashboard");
+          }
+        }
       } else {
         const parsed = loginSchema.parse({
           email: formData.get("email"),

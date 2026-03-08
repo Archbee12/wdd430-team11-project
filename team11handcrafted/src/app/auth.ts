@@ -74,11 +74,17 @@ export async function signupUser(data: z.infer<typeof signupSchema>) {
       VALUES (${user.id}, ${token});
     `;
 
-    if (role === "artisan") {
-      redirect(`/dashboard/artisans/${user.id}/edit`);
-    } else {
-      redirect("/dashboard");
-    }
+    // if (role === "artisan") {
+    //   redirect(`/dashboard/artisans/${user.id}/edit`);
+    // } else {
+    //   redirect("/dashboard");
+    // }
+
+    return {
+      success: true,
+      role,
+      userId: user.id
+    };
   } catch (error) {
 
     console.error("SIGNUP ERROR:", error);
