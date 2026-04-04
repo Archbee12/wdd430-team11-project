@@ -8,6 +8,12 @@
 ![Cloudinary](https://img.shields.io/badge/Cloudinary-3448C5?style=for-the-badge&logo=cloudinary&logoColor=white)
 
 ---
+## 🌍 Live Application
+This project is deployed on Vercel
+
+👉 Live Application: https://wdd430-team11-project-nxem.vercel.app
+
+---
 
 ## 📌 Overview
 
@@ -40,8 +46,15 @@ Handcrafted Haven is a full-stack web application that connects users with artis
 
 ---
 
+## Team Member
+- **Yi-Hsung Chung**
+- **Nana Kwesi Gyeni**
+- **Deborah Sarah Okon**
+
 ## ⚙️ Setup & Installation
 
 ### Install dependencies
 ```bash
 pnpm install
+
+
